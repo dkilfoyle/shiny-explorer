@@ -3,8 +3,6 @@ require(ggplot2, quietly=T)
 ```
 # Analysis: 1 numeric
 
-<div id="toc"></div>
-
 ## Inputs
 
 Selected 1 numeric variable in dataframe mydf

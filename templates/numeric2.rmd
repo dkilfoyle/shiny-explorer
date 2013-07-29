@@ -3,7 +3,6 @@ require(ggplot2, quietly=T)
 ```
 
 # Analysis: 2 Numerics
----
 
 ## Inputs
 

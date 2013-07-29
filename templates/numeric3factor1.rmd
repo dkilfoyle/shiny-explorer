@@ -3,7 +3,6 @@ require(ggplot2, quietly=T)
 ```
 
 # Analysis: Multiple Numerics by 1 factor
----
 
 ## Inputs
 

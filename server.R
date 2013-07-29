@@ -151,6 +151,7 @@ shinyServer(function(input, output, session) {
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),
       "<script>
             $('#analysis pre code').each(function(i, e) {hljs.highlightBlock(e)});
+            $('#analysis h1').after('<div id=\"toc\"></div>')
             generateTOC($('#toc')[0], $('#analysis')[0]);
         </script>", 
       sep = '\n')

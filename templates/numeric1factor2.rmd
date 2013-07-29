@@ -1,5 +1,4 @@
 # Analysis: 1 Numeric by 2 Factors
----
 
 ## Inputs
 
