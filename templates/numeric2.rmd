@@ -1,5 +1,7 @@
 ```{r setup, echo=FALSE}
 require(ggplot2, quietly=T)
+opts_chunk$set(comment="") # remove the comment symbol from knitr output
+opts_chunk$set(message=F, warning=F) # unless debugging
 ```
 
 # Analysis: 2 Numerics
@@ -38,17 +40,33 @@ ezCor(mydf[,c("numeric1", "numeric2")])
 
 ## Correlation Tests
 
-Correlation coefficient (measure of how linear 1.0 = straight line)
+Correlation coefficient (measure of how linear 1.0 = straight line). Values of > 0.7 are considered a big effect size.
 
-```{r cortest}
+```{r pearson}
 with(mydf, cor(numeric1, numeric2))
 ```
 
 Test of significance of correlation coefficient: Pearson
 
-```{r pearson}
+```{r cortest}
 with(mydf, cor.test(numeric1, numeric2))
 ```
+
+### Reporting Correlations
+
+<% if (cor.test(mydf$numeric1, mydf$numeric2)$p.value < 0.05) { %> 
+There is a significant relationship between numeric1 and numeric2, *r=`r cor(mydf$numeric1, mydf$numeric2)`, `r dkpval(cor.test(mydf$numeric1, mydf$numeric2)$p.value)`*.
+<% } %>
+
+### R^2
+
+R^2 indicates how much of the variation in x1 is shared (and potentially explained by) x2.
+
+```{r r2}
+with(mydf, cor(numeric1, numeric2)^2)
+```
+
+### Non-parametric tests
 
 Test of significance: Spearman (non-parametric)
 
@@ -56,6 +74,13 @@ Test of significance: Spearman (non-parametric)
 with(mydf, cor.test(numeric1, numeric2, method="spearman"))
 ```
 
+Test of significance: Kendall's Tau (non-parametric). Use if small dataset with many tied ranks.
+
+```{r kendall}
+table(mydf$numeric1)[table(mydf$numeric1)>1]
+table(mydf$numeric2)[table(mydf$numeric2)>1]
+with(mydf, cor.test(numeric1, numeric2, method="kendall"))
+```
 
 ## Paired T-Test
 

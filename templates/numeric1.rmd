@@ -1,5 +1,7 @@
 ```{r debug, echo=FALSE}
 require(ggplot2, quietly=T)
+opts_chunk$set(comment="") # remove the comment symbol from knitr output
+opts_chunk$set(message=F, warning=F) # unless debugging
 ```
 # Analysis: 1 numeric
 
@@ -52,6 +54,8 @@ Consider transforming the variable or using non-parametric tests.
 <% } %>
 
 ### Log transformation
+
+Consider using a log transformation for positive skew (long right tail).
 
 ```{r histolog, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
 ggplot(mydf, aes(x=log(numeric1))) +

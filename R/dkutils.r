@@ -14,3 +14,10 @@ buildAccordion = function(name, item, expanded=F) {
     )
   )
 }
+
+dkpval = function(myp) {
+  if (myp < 0.001) return("p < 0.001")
+  if (myp < 0.01) return("p < 0.01")
+  if (myp < 0.05) return("p < 0.05")
+  return(sprintf("p = %.2f", myp))
+}
