@@ -46,7 +46,7 @@ shinyServer(function(input, output, session) {
   output$analysis = renderText({
     
     if (input$go == 0)
-      return(NULL)
+      return("Select some fields first")
     
     # show the Analysis tab panel
     # updateTabsetPanel(session, "mainPanelTabset","Analysis") # doesn't work ? why
