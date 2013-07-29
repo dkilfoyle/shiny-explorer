@@ -40,6 +40,17 @@ ggplot(mydf, aes(x=factor(1), y=numeric1)) +
 dkPlotNormality(mydf[,"numeric1"])
 ```
 
+### Shapiro-Wilk test of normality
+
+```{r ShapWilk, comment=NA}
+shapiro.test(mydf[,"numeric1"])
+```
+
+<% if (shapiro.test(mydf$numeric1)$p.value < 0.05) { %>
+**Warning:** The Shapiro-Wilk p value is < 0.05 indicating that mydf$numeric1 significantly departs from normality.
+Consider transforming the variable or using non-parametric tests.
+<% } %>
+
 ### Log transformation
 
 ```{r histolog, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
@@ -48,8 +59,3 @@ ggplot(mydf, aes(x=log(numeric1))) +
   geom_density()
 ```
 
-### Shapiro-Wilk test of normality
-
-```{r ShapWilk, comment=NA}
-shapiro.test(mydf[,"numeric1"])
-```
