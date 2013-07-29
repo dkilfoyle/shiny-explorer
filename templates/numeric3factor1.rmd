@@ -1,0 +1,49 @@
+```{r setup, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+
+# Analysis: Multiple Numerics by 1 factor
+---
+
+## Inputs
+
+Selected numeric variables in dataframe mydf
+```{r allnumerics, echo=FALSE, results="asis"}
+cat("* ")
+cat(numericlist, sep="\n* ")
+```
+
+Factor = factor1
+
+<% if (nlevels(mydf$factor1)==3) { %>
+
+## T-Test table
+
+```{r ttesttable, results="asis", echo=F}
+
+getstars = function(x) {
+  if (x<0.001) return("***")
+  if (x<0.01) return("**")
+  if (x<0.05) return("*")
+  return("")
+}
+
+getttest = function(mynumeric, sigfig=2) {
+  template = paste("%.",sigfig,"f (%.",sigfig,"f)",sep="")
+  n1 = mydf[mydf$factor1 == levels(mydf$factor1)[1], mynumeric]
+  n2 = mydf[mydf$factor1 == levels(mydf$factor1)[2], mynumeric]
+  pval=t.test(n1,n2)$p.value
+  return(c(
+    sprintf(template, mean(n1,na.rm=T), sd(n1,na.rm=T)),
+    sprintf(template, mean(n2,na.rm=T), sd(n2,na.rm=T)),
+    paste(format.pval(pval, eps=0.0001), getstars(pval), sep="")))
+  
+}
+
+tbl=t(sapply(numericlist, getttest, 2))
+colnames(tbl) = c(levels(mydf$factor1)[1], levels(mydf$factor1)[2], "p")
+
+kable(tbl, format="html", table.attr='class="data table table-bordered table-condensed"')
+```
+
+<% } %>

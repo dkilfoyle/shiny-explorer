@@ -1,0 +1,45 @@
+# Analysis: factor1
+
+```{r debug, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+
+## Inputs
+
+Selected 1 factor variable in dataframe mydf
+* factor1
+
+```{r table}
+table(mydf[,"factor1"])
+```
+
+
+```{r indexplot, fig.width=7, fig.height=6}
+plot(mydf[,"factor1"])
+```
+
+## Summary statistics
+
+```{r summary, comment=NA}
+summary(mydf[,"factor1"])
+```
+
+## Spread of values
+
+```{r histo, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=factor1)) +
+  geom_histogram()
+```
+
+## Significance test
+
+```{r chisq}
+chisq.test(table(mydf[,"factor1"]))
+```
+
+If any one of the expected frequencies is <5 then should use Fischer exact test
+
+```{r fisher}
+fisher.test(table(mydf[,"factor1"]))
+```
+

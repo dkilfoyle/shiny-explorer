@@ -1,0 +1,66 @@
+```{r debug, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+
+# Analysis: 2 Factors
+---
+
+## Inputs
+
+Selected 2 factor variables in dataframe mydf
+* factor1
+* factor2
+
+## Summary statistics
+
+```{r summary}
+summary(mydf[, c("factor1","factor2")])
+```
+
+## Frequency plots
+
+```{r factorplot, fig.width=7, fig.height=6}
+ggplot(mydf, aes(factor1, fill=factor2)) + 
+  geom_bar()
+```
+
+```{r factorplotdodge, fig.width=7, fig.height=6}
+ggplot(mydf, aes(factor1, fill=factor2)) + 
+  geom_bar(position="dodge")
+```
+
+```{r factorplotline, fig.width=7, fig.height=6}
+ggplot(mydf, aes(factor1)) + geom_freqpoly(aes(group=factor2, color=factor2)) 
+  geom_line()
+```
+
+
+## Tabulation
+
+```{r crosstable, comment=NA}
+require(gmodels, quietly=T)
+CrossTable(mydf$factor1, mydf$factor2, prop.r=F, prop.c=F, prop.chisq=F)
+```
+
+## Tests
+
+Recommend to use Fisher over Chi-Square if any of the cell counts are < 5
+
+### Chi-Square
+
+```{r tests, comment=NA}
+summary(table(mydf$factor1, mydf$factor2))
+```
+
+### Fisher Exact Test
+
+```{r testsfisher, comment=NA}
+fisher.test(mydf$factor1, mydf$factor2)
+```
+
+## Mosaic Plot
+
+```{r mosaicplot, echo=F, fig.width=7, fig.height=6}
+require(vcd,quietly=T,warn.conflicts=F)
+mosaic(~ factor1 + factor2, data=mydf, shade=T, legend=T)
+```

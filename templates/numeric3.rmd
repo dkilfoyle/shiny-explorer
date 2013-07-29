@@ -1,0 +1,32 @@
+```{r setup, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+
+# Analysis: Multiple Numerics
+---
+
+## Inputs
+
+Selected variables in dataframe mydf
+```{r allnumerics, echo=FALSE, results="asis"}
+cat("* ")
+cat(numericlist, sep="\n* ")
+```
+
+## Summary Statistics
+
+```{r summary}
+summary(mydf[, numericlist])
+```
+
+
+## Correlation Matrix
+
+```{r corrplot, fig.width=7, fig.height=6}
+dkPairs(mydf[,numericlist])
+```
+
+```{r corrplot2, fig.width=7, fig.height=6}
+require(ez, quietly=T)
+ezCor(mydf[,numericlist])
+```

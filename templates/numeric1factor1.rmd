@@ -1,0 +1,132 @@
+# Analysis: numeric1 by factor1
+
+```{r debug, echo=FALSE}
+require(ggplot2, quietly=T)
+opts_chunk$set(comment="") # remove the comment symbol from knitr output
+opts_chunk$set(message=F, warning=F) # unless debugging
+```
+
+## Inputs
+
+Selected variables in dataframe mydf
+* Numeric: numeric1
+* Factor: factor1
+
+### Index Plot
+
+```{r indexplot, fig.width=7, fig.height=6}
+ggplot(data=mydf, aes(x=row.names(mydf), y=numeric1, color=factor1)) +
+  geom_point()
+```
+
+## Summary statistics
+
+```{r summary, comment=NA, results="asis"}
+require(plyr)
+kable(ddply(mydf, "factor1", summarize, numeric1.mean = mean(numeric1), numeric1.min=min(numeric1), numeric1.max=max(numeric1)), format="html", row.names=NA, table.attr='class="data table table-bordered table-condensed"')
+```
+
+### Plot of means
+
+```{r normality, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+with(mydf, dkPlotMeans2(numeric1, factor1))
+```
+
+## Spread of values
+
+Visually check that the distributions are normal and show homoscedasticity (similar variance).
+
+```{r histo, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=numeric1, fill=factor1)) +
+  geom_histogram()
+```
+
+```{r boxplot, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=factor1, y=numeric1)) +
+  geom_boxplot()
+```
+
+### Normality tests
+
+If either of the numeric ranges is non-normal consider using transformations or non-parametric tests (Wilcoxon if 2 sample). If the Shapiro-Wilk test p value is < 0.05 then the distribution is not normal.
+
+```{r}
+ddply(mydf, .(factor1), summarize, shapiro.p = shapiro.test(numeric1)$p.value)
+```
+
+### Variance tests
+
+T-test, and ANOVA require homogeneity of variances (homoscedasticity). If variances are significantly different (p < 0.05) then use Kolmogorov-Smirnov test (see below).
+
+<% if (nlevels(mydf$factor1) == 2) { %>
+
+```{r variancetest}
+  var.test(numeric1~factor1, mydf)
+```
+
+<% } else { %>
+
+```{r variancetest}
+  bartlett.test(mydf$numeric1, mydf$factor1)
+```
+
+<% } %>
+
+<% if (nlevels(mydf$factor1) == 2) { %>
+
+## T-Tests
+
+```{r ttest}
+t.test(numeric1 ~ factor1, mydf)
+```
+
+### Non-parametric
+
+```{r}
+with(mydf, wilcox.test(numeric1 ~ factor1))
+```
+
+<% } %>
+
+## Anova
+
+```{r anova}
+aov1 = aov(numeric1~factor1, data=mydf)
+summary(aov1)
+```
+
+<%= ifelse(summary(aov1)$"Pr(>F)" < 0.05, 
+  "Anova P is < 0.05, therefore it is acceptable to continue with post-hoc comparisons",
+  "Anova P is > 0.05, there is no difference across groups, post-hoc comparisons are not valid") %>
+
+### Non-parametric
+
+```{r}
+with(mydf, kruskal.test(numeric1~factor1))
+```
+
+### Post-hoc comparisons using Tukey HSD
+
+```{r tukey}
+thsd1 = TukeyHSD(aov1)
+thsd1
+```
+
+```{r tukeyplot, fig.width=7, fig.height=6}
+plot(thsd1)
+```
+
+### Post-hoc comparisons using pairwise t.test with Bonferonni p adjustment
+
+```{r pairwisettest}
+with(mydf, pairwise.t.test(numeric1, factor1, p.adj="bonf"))
+```
+
+<% if (nlevels(mydf$factor1)==2) { %>
+
+## Difference in distribution (Kolmogorov-Smirnov)
+
+```{r komogorov}
+with(mydf, ks.test(numeric1[factor1==factor1[levels()[1]]], numeric1[factor1==factor1[levels()[2]]]))
+```
+<% } %>

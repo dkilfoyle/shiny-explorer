@@ -1,0 +1,66 @@
+```{r setup, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+
+# Analysis: 2 Numerics
+---
+
+## Inputs
+
+Selected variables in dataframe mydf
+* numeric1
+* numeric2
+
+## Summary statistics
+
+```{r summary}
+summary(mydf[, c("numeric1","numeric2")])
+```
+
+## Scatter Plot
+
+```{r scatterplot, fig.width=7, fig.height=6}
+ggplot(mydf, aes(x=numeric1, y=numeric2)) +
+  geom_point() +
+  geom_smooth()
+```
+
+
+## Correlation Matrix
+
+```{r corrplot, fig.width=7, fig.height=6}
+dkPairs(mydf[,c("numeric1", "numeric2")])
+```
+
+```{r corrplot2, fig.width=7, fig.height=6}
+require(ez, quietly=T) 
+ezCor(mydf[,c("numeric1", "numeric2")])
+```
+
+## Correlation Tests
+
+Correlation coefficient (measure of how linear 1.0 = straight line)
+
+```{r cortest}
+with(mydf, cor(numeric1, numeric2))
+```
+
+Test of significance of correlation coefficient: Pearson
+
+```{r pearson}
+with(mydf, cor.test(numeric1, numeric2))
+```
+
+Test of significance: Spearman (non-parametric)
+
+```{r spearman}
+with(mydf, cor.test(numeric1, numeric2, method="spearman"))
+```
+
+
+## Paired T-Test
+
+```{r}
+  t.test(mydf$numeric1, mydf$numeric2, paired=T)
+```
+

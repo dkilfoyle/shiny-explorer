@@ -1,0 +1,57 @@
+```{r debug, echo=FALSE}
+require(ggplot2, quietly=T)
+```
+# Analysis: 1 numeric
+
+<div id="toc"></div>
+
+## Inputs
+
+Selected 1 numeric variable in dataframe mydf
+* numeric1
+
+## Summary statistics
+
+```{r summary, comment=NA}
+# summary
+summary(mydf[,"numeric1"])
+```
+
+## Index plot
+
+```{r indexplot, fig.width=7, fig.height=6}
+plot(mydf[,"numeric1"])
+```
+
+
+## Spread of values
+
+```{r histo, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=numeric1)) +
+  geom_histogram()
+```
+
+```{r boxplot, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=factor(1), y=numeric1)) +
+  geom_boxplot()
+```
+
+## Distribution
+
+```{r normality, fig.width=7, fig.height=6}
+dkPlotNormality(mydf[,"numeric1"])
+```
+
+### Log transformation
+
+```{r histolog, fig.width=7, fig.height=6, warning=FALSE, message=FALSE}
+ggplot(mydf, aes(x=log(numeric1))) +
+  geom_histogram() +
+  geom_density()
+```
+
+### Shapiro-Wilk test of normality
+
+```{r ShapWilk, comment=NA}
+shapiro.test(mydf[,"numeric1"])
+```

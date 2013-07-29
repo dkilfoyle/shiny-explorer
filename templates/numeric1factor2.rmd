@@ -1,0 +1,32 @@
+# Analysis: 1 Numeric by 2 Factors
+---
+
+## Inputs
+
+Selected variables in dataframe mydf
+* Numeric: numeric1
+* Factor: factor1
+* Factor: factor2
+
+## Summary statistics
+
+```{r summary, comment=NA}
+require(plyr)
+ddply(mydf, c("factor1","factor2"), summarize, numeric1.mean = mean(numeric1))
+```
+
+### Box Plot
+
+```{r boxplot, fig.width=7, fig.height=6}
+par(mfrow=c(1,2))
+plot(numeric1 ~ factor1 + factor2, data=mydf)
+```
+
+### Balloon Plot
+
+```{r balloonplot, fig.width=7, fig.height=6}
+require(gplots)
+require(plyr)
+.tempTable = ddply(mydf, c("factor1","factor2"), summarize, numeric1.mean = mean(numeric1))
+balloonplot(.tempTable$factor1, .tempTable$factor2, .tempTable$numeric1.mean)
+```
