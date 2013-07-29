@@ -64,18 +64,19 @@ shinyServer(function(input, output, session) {
       
     })
     
+    # could simplify following by using knit_expand and {{mydf}}${{numeric1}} etc in templates
+    # but this makes the templates hard to read and write
+    
     if ((length(numerics) == 0) & (length(factors)==1))
     {
-      rmdsource = readLines("templates/factor1.rmd")
-      rmdsource = paste(rmdsource, collapse="\n")   # concatenate to a single string
-      rmdsub = gsub("mydf", dfstr, rmdsource)       # could do this with brew but this is simpler and cleaner in the rmd source
+      rmdsource = paste(readLines("templates/factor1.rmd"), collapse="\n")
+      rmdsub = gsub("mydf", dfstr, rmdsource)       
       rmdsub = gsub("factor1", factors[1], rmdsub)
     }
     
     if ((length(numerics) == 0) & (length(factors)==2))
     {
-      rmdsource = readLines("templates/factor2.rmd")
-      rmdsource = paste(rmdsource, collapse="\n") 
+      rmdsource = paste(readLines("templates/factor2.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("factor1", factors[1], rmdsub)
       rmdsub = gsub("factor2", factors[2], rmdsub)
@@ -83,16 +84,14 @@ shinyServer(function(input, output, session) {
     
     if ((length(numerics) == 1) & (length(factors)==0))
     {
-      rmdsource = readLines("templates/numeric1.rmd")
-      rmdsource = paste(rmdsource, collapse="\n") 
+      rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numeric1", numerics[1], rmdsub)
     }
     
     if ((length(numerics) == 1) & (length(factors)==1))
     {
-      rmdsource = readLines("templates/numeric1factor1.rmd")
-      rmdsource = paste(rmdsource, collapse="\n") 
+      rmdsource = paste(readLines("templates/numeric1factor1.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numeric1", numerics[1], rmdsub)
       rmdsub = gsub("factor1", factors[1], rmdsub)  
@@ -100,8 +99,7 @@ shinyServer(function(input, output, session) {
     
     if ((length(numerics) == 1) & (length(factors)==2))
     {
-      rmdsource = readLines("templates/numeric1factor2.rmd")
-      rmdsource = paste(rmdsource, collapse="\n") 
+      rmdsource = paste(readLines("templates/numeric1factor2.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numeric1", numerics[1], rmdsub)
       rmdsub = gsub("factor1", factors[1], rmdsub)  
@@ -110,26 +108,22 @@ shinyServer(function(input, output, session) {
     
     if ((length(numerics) == 2) & (length(factors)==0))
     {
-      rmdsource = readLines("templates/numeric2.rmd")
-      rmdsource = paste(rmdsource, collapse="\n")
+      rmdsource = paste(readLines("templates/numeric2.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numeric1", numerics[1], rmdsub)
       rmdsub = gsub("numeric2", numerics[2], rmdsub)
     }
     
-    
     if ((length(numerics) > 2) & (length(factors)==0))
     {
-      rmdsource = readLines("templates/numeric3.rmd")
-      rmdsource = paste(rmdsource, collapse="\n")
+      rmdsource = paste(readLines("templates/numeric3.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numericlist", paste('c("', paste(numerics, collapse='","'), '")', sep=""), rmdsub)
     }
     
     if ((length(numerics) == 2) & (length(factors) == 1))
     {
-      rmdsource = readLines("templates/numeric2factor1.rmd")
-      rmdsource = paste(rmdsource, collapse="\n")
+      rmdsource = paste(readLines("templates/numeric2factor1.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numeric1", numerics[1], rmdsub)
       rmdsub = gsub("numeric2", numerics[2], rmdsub)  
@@ -138,8 +132,7 @@ shinyServer(function(input, output, session) {
     
     if ((length(numerics) > 2) & (length(factors)==1))
     {
-      rmdsource = readLines("templates/numeric3factor1.rmd")
-      rmdsource = paste(rmdsource, collapse="\n")
+      rmdsource = paste(readLines("templates/numeric3factor1.rmd"), collapse="\n")
       rmdsub = gsub("mydf", dfstr, rmdsource)
       rmdsub = gsub("numericlist", paste('c("', paste(numerics, collapse='","'), '")', sep=""), rmdsub)
       rmdsub = gsub("factor1", factors[1], rmdsub)
@@ -147,6 +140,7 @@ shinyServer(function(input, output, session) {
     
     brewout = capture.output(brew(text=rmdsub))
     
+    #TODO: knitr uses highr?
     paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),
       "<script>
@@ -155,10 +149,6 @@ shinyServer(function(input, output, session) {
             generateTOC($('#toc')[0], $('#analysis')[0]);
         </script>", 
       sep = '\n')
-    
-    #TODO: knitr uses highr?
-    
-    
   })
   
   # will need to change this to renderChart (not2) on new version

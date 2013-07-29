@@ -1,4 +1,4 @@
-# Analysis: numeric1 by factor1
+# Analysis: 1 numeric by 1 factor
 
 ```{r debug, echo=FALSE}
 require(ggplot2, quietly=T)
