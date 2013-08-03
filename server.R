@@ -41,27 +41,31 @@ shinyServer(function(input, output, session) {
   output$numericInfo = renderTable(getDFInfo()$numerics[,-1])
   output$factorInfo = renderTable(getDFInfo()$factors[,-1])
   output$dateInfo = renderTable(getDFInfo()$dates[,-1])
-  output$logicalInfo = renderTable(getDFInfo()$logicals[,-1])  
+  output$logicalInfo = renderTable(getDFInfo()$logicals[,-1])
+  
+  observe({
+    if (input$go != 0) {
+      # show the Analysis tab panel
+      updateTabsetPanel(session, "mainPanelTabset", selected="Analysis") 
+    }
+  })
   
   output$analysis = renderText({
     
     if (input$go == 0)
       return("Select some fields first")
     
-    # show the Analysis tab panel
-    # updateTabsetPanel(session, "mainPanelTabset","Analysis") # doesn't work ? why
-    
     #    progress = Progress$new(session,min=1,max=2)
     #    on.exit(progress$close())
     #    progress$set(message="Knitting!",detail="bla bla bla")
     
     isolate({
-      
+      # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
+      # instead wait until go button pressed
       rmdsub = "Error: There is no report template for this combination of selected fields."
       numerics = input$numerics 
       factors = input$factors
       dfstr = input$dataset
-      
     })
     
     # could simplify following by using knit_expand and {{mydf}}${{numeric1}} etc in templates
