@@ -4,7 +4,7 @@ require(knitr)
 require(markdown)
 require(brew)
 library(rCharts)
-library(XML)
+library(gsubfn)
 library(highr)
 
 # Define server logic required to summarize and view the selected dataset
@@ -145,23 +145,25 @@ shinyServer(function(input, output, session) {
     }
     
     # For debugging
-    rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
-    data(iris)
-    library(knitr)
-    library(brew)
-    rmdsub = gsub("mydf", "iris", rmdsource)
-    rmdsub = gsub("numeric1", "Sepal.Length", rmdsub)
-    brewout = capture.output(brew(text=rmdsub))
-    myhtml = knit2html(text = brewout, stylesheet="", fragment.only = TRUE)  
-    library(XML)
-    x=htmlParse(myhtml)
-    library(highr)
-    x3 = getNodeSet(x, "//pre/code[@class='r']")
-    x4= xmlSApply(x3, function(myNode) { 
-      mytxt = xmlValue(myNode)
-      xmlValue(myNode) = ""
-      addChildren(myNode, xmlParseString(hilight(mytxt,format="html")))
-      })
+#     rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
+#     data(iris)
+#     library(knitr)
+#     library(brew)
+#     library(highr)
+#     rmdsub = gsub("mydf", "iris", rmdsource)
+#     rmdsub = gsub("numeric1", "Sepal.Length", rmdsub)
+#     brewout = capture.output(brew(text=rmdsub))
+#     myhtml = knit2html(text = brewout, stylesheet="", fragment.only = TRUE)  
+
+#     library(XML)
+#     x=htmlParse(myhtml)
+#     library(highr)
+#     x3 = getNodeSet(x, "//pre/code[@class='r']")
+#     x4= xmlSApply(x3, function(myNode) { 
+#       mytxt = xmlValue(myNode)
+#       xmlValue(myNode) = ""
+#       addChildren(myNode, xmlParseString(paste(hilight(mytxt,format="html"),collapse="\n")))
+#       })
     
     brewout = capture.output(brew(text=rmdsub))
     
@@ -175,14 +177,12 @@ shinyServer(function(input, output, session) {
         </script>", 
       sep = '\n')
     
-    parsedhtml=htmlParse(myhtml)
-    sourcenodes = getNodeSet(parsedhtml, "//pre/code[@class='r']")
-    xmlSApply(sourcenodes, function(myNode) { 
-      mytxt = xmlValue(myNode)
-      xmlValue(myNode) = ""
-      addChildren(myNode, xmlParseString(hilight(mytxt,format="html")))
-    })
-    capture.output(print(parsedhtml))
+    gsubfn("<pre><code class=\"r\">(.*?)</code></pre>", 
+           ~ paste("
+              <pre><code class=\"r\">",
+              str_replace_all(paste(hilight(str_replace_all(x, "&quot;", "\""), format="html"),collapse="\n"), "\n", "<br>"),
+              "</code></pre>", sep=""),
+           myhtml)
   })
   
   # will need to change this to renderChart (not2) on new version
