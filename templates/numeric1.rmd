@@ -12,7 +12,7 @@ Selected 1 numeric variable in dataframe mydf
 
 ## Summary statistics
 
-```{r summary, comment=NA}
+```{r summary}
 # summary
 summary(mydf[,"numeric1"])
 ```
