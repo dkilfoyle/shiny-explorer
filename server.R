@@ -6,6 +6,7 @@ require(brew)
 library(rCharts)
 library(gsubfn)
 library(highr)
+library(stringr)
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
