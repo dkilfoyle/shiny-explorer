@@ -1,5 +1,6 @@
 ```{r setup, echo=FALSE}
 require(ggplot2, quietly=T)
+require(grid, quietly=T)
 opts_chunk$set(comment="") # remove the comment symbol from knitr output
 opts_chunk$set(message=F, warning=F) # unless debugging
 ```
@@ -26,7 +27,6 @@ ggplot(mydf, aes(x=numeric1, y=numeric2)) +
   geom_smooth()
 ```
 
-
 ## Correlation Matrix
 
 ```{r corrplot, fig.width=7, fig.height=6}
@@ -40,7 +40,7 @@ ezCor(mydf[,c("numeric1", "numeric2")])
 
 ## Correlation Tests
 
-Correlation coefficient (measure of how linear 1.0 = straight line). Values of > 0.7 are considered a big effect size.
+Correlation coefficient (measure of how linear 1.0 = straight line). Values of > 0.7 are generally considered a large effect size.
 
 ```{r pearson}
 with(mydf, cor(numeric1, numeric2))
@@ -56,6 +56,8 @@ with(mydf, cor.test(numeric1, numeric2))
 
 <% if (cor.test(mydf$numeric1, mydf$numeric2)$p.value < 0.05) { %> 
 There is a significant relationship between numeric1 and numeric2, *r=`r cor(mydf$numeric1, mydf$numeric2)`, `r dkpval(cor.test(mydf$numeric1, mydf$numeric2)$p.value)`*.
+<% } else { %>
+There is no significant relationship between numeric1 and numeric2 (Pearson p>0.05)
 <% } %>
 
 ### R^2
@@ -80,6 +82,43 @@ Test of significance: Kendall's Tau (non-parametric). Use if small dataset with 
 table(mydf$numeric1)[table(mydf$numeric1)>1]
 table(mydf$numeric2)[table(mydf$numeric2)>1]
 with(mydf, cor.test(numeric1, numeric2, method="kendall"))
+```
+
+## Regression
+
+Regression fits a straight line to the data and finds it's slope. Regression tests check if the slope is different to 0.
+
+```{r regression}
+mylm = lm(numeric2~numeric1, data=mydf)
+summary(mylm)
+```
+
+```{r regressionplot}
+ggplot(mydf, aes(x=numeric1, y=numeric2)) + 
+  geom_smooth(method="lm", colour="red", size=1)  
+```
+
+```{r regressiondiag}
+# debug
+#mydf=iris
+#mydf$numeric1 = iris$Petal.Length
+#mydf$numeric2 = iris$Petal.Width
+
+#lm regression line with confidence band
+p1<- ggplot(mydf, aes(x=numeric1, y=numeric2)) + 
+  geom_smooth(method="lm", colour="red", size=1)  
+# fitted values-residual plot
+p2<- ggplot(mylm, aes(.fitted, .resid)) + 
+  geom_hline(yintercept=0, colour="purple", size=1) + geom_point() + 
+  geom_smooth(size=1, se =F)
+# fitted values-standardized residual plot
+p3<- p2 + aes(y= .stdresid) +
+  geom_hline(yintercept=0, colour="orange", size=1)
+# Cook's distance, with size proportional to distance
+p4<- p2 + aes(size= .cooksd) +
+  scale_area("Cook's distance") +
+  geom_hline(yintercept=0, colour="coral2", size=1)
+ggplotarrange(p1,p2,p3,p4,ncol=2)
 ```
 
 ## Paired T-Test
