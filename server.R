@@ -144,30 +144,9 @@ shinyServer(function(input, output, session) {
       rmdsub = gsub("factor1", factors[1], rmdsub)
     }
     
-    # For debugging
-#     rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
-#     data(iris)
-#     library(knitr)
-#     library(brew)
-#     library(highr)
-#     rmdsub = gsub("mydf", "iris", rmdsource)
-#     rmdsub = gsub("numeric1", "Sepal.Length", rmdsub)
-#     brewout = capture.output(brew(text=rmdsub))
-#     myhtml = knit2html(text = brewout, stylesheet="", fragment.only = TRUE)  
-
-#     library(XML)
-#     x=htmlParse(myhtml)
-#     library(highr)
-#     x3 = getNodeSet(x, "//pre/code[@class='r']")
-#     x4= xmlSApply(x3, function(myNode) { 
-#       mytxt = xmlValue(myNode)
-#       xmlValue(myNode) = ""
-#       addChildren(myNode, xmlParseString(paste(hilight(mytxt,format="html"),collapse="\n")))
-#       })
-    
     brewout = capture.output(brew(text=rmdsub))
     
-    #TODO: knitr uses highr?
+    render_markdown()
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),
       "<script>
@@ -177,11 +156,25 @@ shinyServer(function(input, output, session) {
         </script>", 
       sep = '\n')
     
+#     rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
+#     rmdsub = gsub("mydf", "iris", rmdsource)
+#     rmdsub = gsub("numeric1", "Petal.Length", rmdsub)
+#     brewout = capture.output(brew(text=rmdsub))
+#     render_markdown()
+#     myhtml = knit2html(text=brewout, stylesheet="", fragment.only = TRUE)
+    myhtml = str_replace_all(myhtml, "&quot;", "\"")
+    myhtml = str_replace_all(myhtml, "&lt;", "<")
+    myhtml = str_replace_all(myhtml, "&gt;", ">")
+    myhtml = str_replace_all(myhtml, "&#39;", "'")
+    
+    
+    
+   # str_match_all(myhtml, "<pre><code class=\"r\">.*?</code></pre>")
     gsubfn("<pre><code class=\"r\">(.*?)</code></pre>", 
            ~ paste("
               <pre><code class=\"r\">",
-              str_replace_all(paste(hilight(str_replace_all(x, "&quot;", "\""), format="html"),collapse="\n"), "\n", "<br>"),
-              "</code></pre>", sep=""),
+                   str_replace_all(paste(hilight(x, format="html"),collapse="\n"), "\n", "<br>"),
+                   "</code></pre>", sep=""),
            myhtml)
   })
   
