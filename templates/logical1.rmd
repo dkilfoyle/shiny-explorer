@@ -1,0 +1,40 @@
+```{r setup, echo=FALSE}
+require(ggplot2, quietly=T)
+myfactors = factorlist
+opts_chunk$set(comment="") # remove the comment symbol from knitr output
+```
+
+# Analysis: Logistic Regression
+
+## Inputs
+
+Selected variables in dataframe mydf
+```{r allnumerics, echo=FALSE, results="asis"}
+cat(paste("* ", "logical1", "\n* ", sep=""))
+cat(myfactors, sep="\n* ")
+```
+
+## Summary Statistics
+
+```{r summary}
+summary(mydf[, "logical1"])
+```
+
+
+## Logistic Regression
+
+```{r logmodel}
+mymodel = glm(logical1 ~ <%= paste(factorlist, sep="+") %>, data=mydf, family=binomial())
+summary(mymodel)
+```
+
+```{r plotmodel}
+plot_odds(mymodel)
+```
+
+```{r oddstable, results='asis'}
+  odds<-data.frame(OR = exp(coef(mymodel)), exp(confint(mymodel)))
+  #odds = odds[-1,] # why does this stuff up kable_markdown??
+  colnames(odds) = c("OR","Lower","Upper")
+  kable(odds)
+```

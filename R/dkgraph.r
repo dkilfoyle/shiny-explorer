@@ -18,28 +18,28 @@
 # this allows a "univariate" repeated measures analysis of the data.
 
 make.rm<-function(constant,repeated,data,contrasts) {
-	if(!missing(constant) && is.vector(constant)) {
-		if(!missing(repeated) && is.vector(repeated)) {
-			if(!missing(data)) {
-				dd<-dim(data)
-				replen<-length(repeated)
-				if(missing(contrasts))
-					contrasts<-
-							ordered(sapply(paste("T",1:length(repeated),sep=""),rep,dd[1]))
-				else
-					contrasts<-matrix(sapply(contrasts,rep,dd[1]),ncol=dim(contrasts)[2])
-				if(length(constant) == 1) cons.col<-rep(data[,constant],replen)
-				else cons.col<-lapply(data[,constant],rep,replen)
-				new.df<-data.frame(cons.col,
-						repdat=as.vector(data.matrix(data[,repeated])),
-						contrasts)
-				return(new.df)
-			}
-		}
-	}
-	cat("Usage: make.rm(constant, repeated, data [, contrasts])\n")
-	cat("\tWhere 'constant' is a vector of indices of non-repeated data and\n")
-	cat("\t'repeated' is a vector of indices of the repeated measures data.\n")
+  if(!missing(constant) && is.vector(constant)) {
+    if(!missing(repeated) && is.vector(repeated)) {
+      if(!missing(data)) {
+        dd<-dim(data)
+        replen<-length(repeated)
+        if(missing(contrasts))
+          contrasts<-
+          ordered(sapply(paste("T",1:length(repeated),sep=""),rep,dd[1]))
+        else
+          contrasts<-matrix(sapply(contrasts,rep,dd[1]),ncol=dim(contrasts)[2])
+        if(length(constant) == 1) cons.col<-rep(data[,constant],replen)
+        else cons.col<-lapply(data[,constant],rep,replen)
+        new.df<-data.frame(cons.col,
+                           repdat=as.vector(data.matrix(data[,repeated])),
+                           contrasts)
+        return(new.df)
+      }
+    }
+  }
+  cat("Usage: make.rm(constant, repeated, data [, contrasts])\n")
+  cat("\tWhere 'constant' is a vector of indices of non-repeated data and\n")
+  cat("\t'repeated' is a vector of indices of the repeated measures data.\n")
 }
 
 panel.cor.scale <- function(x, y, digits=2, prefix="", cex.cor, ...)
@@ -54,8 +54,8 @@ panel.cor.scale <- function(x, y, digits=2, prefix="", cex.cor, ...)
   
   test = cor.test(x,y)
   Signif = symnum(test$p.value, corr=F, na=F,
-    cutpoints = c(0,0.001, 0.01, 0.05, 0.1, 1),
-    symbols = c("***","**","*","."," "))
+                  cutpoints = c(0,0.001, 0.01, 0.05, 0.1, 1),
+                  symbols = c("***","**","*","."," "))
   text(0.8,0.8,Signif, cex=cex, col=2)
 }
 
@@ -132,105 +132,105 @@ pairs2 = function()
     }
   } #end of else (smooth)
 }   #end of function
-      
+
 dkPlotMeans <- function(response, factor1, factor2, error.bars = c("se", "sd", "conf.int", "none"),
-    level=0.95, xlab=deparse(substitute(factor1)), ylab=paste("mean of", deparse(substitute(response))), 
-    legend.lab=deparse(substitute(factor2)), main="Plot of Means",
-    pch=1:n.levs.2, lty=1:n.levs.2, col=palette()){
-    if (!is.numeric(response)) stop("Argument response must be numeric.")
-    xlab # force evaluation
-    ylab                                                      
-    legend.lab
-    error.bars <- match.arg(error.bars)
-    if (missing(factor2)){
-        if (!is.factor(factor1)) stop("Argument factor1 must be a factor.")
-        valid <- complete.cases(factor1, response)
-        factor1 <- factor1[valid]
-        response <- response[valid]
-        means <- tapply(response, factor1, mean)
-        sds <- tapply(response, factor1, sd)
-        ns <- tapply(response, factor1, length)
-        if (error.bars == "se") sds <- sds/sqrt(ns)
-        if (error.bars == "conf.int") sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
-        yrange <-  if (error.bars != "none") c( min(means - sds), max(means + sds)) else range(means)
-        levs <- levels(factor1)
-        n.levs <- length(levs)
-        plot(c(1, n.levs), yrange, type="n", xlab=xlab, ylab=ylab, axes=FALSE, main=main)
-        points(1:n.levs, means, type="b", pch=16, cex=2)
-        box()
-        axis(2)
-        axis(1, at=1:n.levs, labels=levs)
-        if (error.bars != "none") arrows(1:n.levs, means - sds, 1:n.levs, means + sds, 
-            angle=90, lty=2, code=3, length=0.125)
-        }
-    else {
-        if (!(is.factor(factor1) | is.factor(factor2))) stop("Arguments factor1 and factor2 must be factors.")
-        valid <- complete.cases(factor1, factor2, response)
-        factor1 <- factor1[valid]
-        factor2 <- factor2[valid]
-        response <- response[valid]
-        means <- tapply(response, list(factor1, factor2), mean)
-        sds <- tapply(response, list(factor1, factor2), sd)
-        ns <- tapply(response, list(factor1, factor2), length)
-        if (error.bars == "se") sds <- sds/sqrt(ns)
-        if (error.bars == "conf.int") sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
-        yrange <-  if (error.bars != "none") c( min(means - sds,na.rm=T), max(means + sds,na.rm=T)) else range(means,na.rm=T)
-        levs.1 <- levels(factor1)
-        levs.2 <- levels(factor2)
-        n.levs.1 <- length(levs.1)
-        n.levs.2 <- length(levs.2)
-        if (n.levs.2 > length(col)) stop(sprintf("Number of groups for factor2, %d, exceeds number of distinct colours, %d."), n.levs.2, length(col))
-        plot(c(1, n.levs.1 + 1), yrange, type="n", xlab=xlab, ylab=ylab, axes=FALSE, main=main)
-        box()
-        axis(2)
-        axis(1, at=1:n.levs.1, labels=levs.1)
-        for (i in 1:n.levs.2){
-            points(1:n.levs.1, means[, i], type="b", pch=pch[i], cex=2, col=col[i], lty=lty[i])
-            if (error.bars != "snone") arrows(1:n.levs.1, means[, i] - sds[, i], 
-                1:n.levs.1, means[, i] + sds[, i], angle=90, code=3, col=col[i], lty=lty[i], length=0.125)
-            }
-        x.posn <- n.levs.1 + 0.25
-        y.posn <- sum(c(0.1, 0.9) * par("usr")[c(3,4)])
-        text(x.posn, y.posn, legend.lab, adj=c(0, -.5))
-        legend(x.posn, y.posn, levs.2, pch=pch, col=col, lty=lty)
-        }
-    invisible(NULL)
+                        level=0.95, xlab=deparse(substitute(factor1)), ylab=paste("mean of", deparse(substitute(response))), 
+                        legend.lab=deparse(substitute(factor2)), main="Plot of Means",
+                        pch=1:n.levs.2, lty=1:n.levs.2, col=palette()){
+  if (!is.numeric(response)) stop("Argument response must be numeric.")
+  xlab # force evaluation
+  ylab                                                      
+  legend.lab
+  error.bars <- match.arg(error.bars)
+  if (missing(factor2)){
+    if (!is.factor(factor1)) stop("Argument factor1 must be a factor.")
+    valid <- complete.cases(factor1, response)
+    factor1 <- factor1[valid]
+    response <- response[valid]
+    means <- tapply(response, factor1, mean)
+    sds <- tapply(response, factor1, sd)
+    ns <- tapply(response, factor1, length)
+    if (error.bars == "se") sds <- sds/sqrt(ns)
+    if (error.bars == "conf.int") sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
+    yrange <-  if (error.bars != "none") c( min(means - sds), max(means + sds)) else range(means)
+    levs <- levels(factor1)
+    n.levs <- length(levs)
+    plot(c(1, n.levs), yrange, type="n", xlab=xlab, ylab=ylab, axes=FALSE, main=main)
+    points(1:n.levs, means, type="b", pch=16, cex=2)
+    box()
+    axis(2)
+    axis(1, at=1:n.levs, labels=levs)
+    if (error.bars != "none") arrows(1:n.levs, means - sds, 1:n.levs, means + sds, 
+                                     angle=90, lty=2, code=3, length=0.125)
+  }
+  else {
+    if (!(is.factor(factor1) | is.factor(factor2))) stop("Arguments factor1 and factor2 must be factors.")
+    valid <- complete.cases(factor1, factor2, response)
+    factor1 <- factor1[valid]
+    factor2 <- factor2[valid]
+    response <- response[valid]
+    means <- tapply(response, list(factor1, factor2), mean)
+    sds <- tapply(response, list(factor1, factor2), sd)
+    ns <- tapply(response, list(factor1, factor2), length)
+    if (error.bars == "se") sds <- sds/sqrt(ns)
+    if (error.bars == "conf.int") sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
+    yrange <-  if (error.bars != "none") c( min(means - sds,na.rm=T), max(means + sds,na.rm=T)) else range(means,na.rm=T)
+    levs.1 <- levels(factor1)
+    levs.2 <- levels(factor2)
+    n.levs.1 <- length(levs.1)
+    n.levs.2 <- length(levs.2)
+    if (n.levs.2 > length(col)) stop(sprintf("Number of groups for factor2, %d, exceeds number of distinct colours, %d."), n.levs.2, length(col))
+    plot(c(1, n.levs.1 + 1), yrange, type="n", xlab=xlab, ylab=ylab, axes=FALSE, main=main)
+    box()
+    axis(2)
+    axis(1, at=1:n.levs.1, labels=levs.1)
+    for (i in 1:n.levs.2){
+      points(1:n.levs.1, means[, i], type="b", pch=pch[i], cex=2, col=col[i], lty=lty[i])
+      if (error.bars != "snone") arrows(1:n.levs.1, means[, i] - sds[, i], 
+                                        1:n.levs.1, means[, i] + sds[, i], angle=90, code=3, col=col[i], lty=lty[i], length=0.125)
     }
-	
+    x.posn <- n.levs.1 + 0.25
+    y.posn <- sum(c(0.1, 0.9) * par("usr")[c(3,4)])
+    text(x.posn, y.posn, legend.lab, adj=c(0, -.5))
+    legend(x.posn, y.posn, levs.2, pch=pch, col=col, lty=lty)
+  }
+  invisible(NULL)
+}
+
 dkPlotMeans2 <- function(response, factor1, factor2, level=0.95,
-    xlab=deparse(substitute(factor1)), ylab=paste("mean of", deparse(substitute(response))), 
-    legend.lab=deparse(substitute(factor2)), main="Plot of Means", col=palette()) {
-    if (!is.numeric(response)) stop("Argument response must be numeric.")
-    xlab # force evaluation
-    ylab                                                      
-    legend.lab
-    if (missing(factor2)){
-        if (!is.factor(factor1)) stop("Argument factor1 must be a factor.")
-        valid <- complete.cases(factor1, response)
-        factor1 <- factor1[valid]
-        response <- response[valid]
-        means <- tapply(response, factor1, mean)
-        sds <- tapply(response, factor1, sd)
-        ns <- tapply(response, factor1, length)
-        sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
-		require(gplots, quietly=T, warn.conflicts=F)
-		barplot2(means, beside=T, main=main, xlab=xlab, ylab=ylab, legend.text=F, plot.ci=T, plot.grid=T, ci.u=means+sds, ci.l=means-sds)
-        }
-    else {
-        if (!(is.factor(factor1) | is.factor(factor2))) stop("Arguments factor1 and factor2 must be factors.")
-        valid <- complete.cases(factor1, factor2, response)
-        factor1 <- factor1[valid]
-        factor2 <- factor2[valid]
-        response <- response[valid]
-        means <- tapply(response, list(factor1, factor2), mean)
-        sds <- tapply(response, list(factor1, factor2), sd)
-        ns <- tapply(response, list(factor1, factor2), length)
-        sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
-		require(gplots,quietly=T,warn.conflicts=F)
-		barplot2(means,beside=T,main=main,xlab=xlab,ylab=ylab,legend.text=T, plot.ci=T,plot.grid=T, ci.u=means+sds,ci.l=means-sds)
-        }
-    invisible(NULL)
-    }
+                         xlab=deparse(substitute(factor1)), ylab=paste("mean of", deparse(substitute(response))), 
+                         legend.lab=deparse(substitute(factor2)), main="Plot of Means", col=palette()) {
+  if (!is.numeric(response)) stop("Argument response must be numeric.")
+  xlab # force evaluation
+  ylab                                                      
+  legend.lab
+  if (missing(factor2)){
+    if (!is.factor(factor1)) stop("Argument factor1 must be a factor.")
+    valid <- complete.cases(factor1, response)
+    factor1 <- factor1[valid]
+    response <- response[valid]
+    means <- tapply(response, factor1, mean)
+    sds <- tapply(response, factor1, sd)
+    ns <- tapply(response, factor1, length)
+    sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
+    require(gplots, quietly=T, warn.conflicts=F)
+    barplot2(means, beside=T, main=main, xlab=xlab, ylab=ylab, legend.text=F, plot.ci=T, plot.grid=T, ci.u=means+sds, ci.l=means-sds)
+  }
+  else {
+    if (!(is.factor(factor1) | is.factor(factor2))) stop("Arguments factor1 and factor2 must be factors.")
+    valid <- complete.cases(factor1, factor2, response)
+    factor1 <- factor1[valid]
+    factor2 <- factor2[valid]
+    response <- response[valid]
+    means <- tapply(response, list(factor1, factor2), mean)
+    sds <- tapply(response, list(factor1, factor2), sd)
+    ns <- tapply(response, list(factor1, factor2), length)
+    sds <- qt((1 - level)/2, df=ns - 1, lower.tail=FALSE) * sds/sqrt(ns)
+    require(gplots,quietly=T,warn.conflicts=F)
+    barplot2(means,beside=T,main=main,xlab=xlab,ylab=ylab,legend.text=T, plot.ci=T,plot.grid=T, ci.u=means+sds,ci.l=means-sds)
+  }
+  invisible(NULL)
+}
 
 dkPlotSurvival = function(Data, EventTime, EventType, EventFactor=NULL, AnalysisTime=NULL, bAddCensusLine=FALSE, sex=NULL, age=NULL, ...)
 {
@@ -288,49 +288,49 @@ dkPlotExpectedSurvival = function( myDFN, myEventTime, myGender, myAge)
 
 DKPlotTukey = function (x, main=NULL, ...) 
 {
-    for (i in seq_along(x)) {
-        xi <- x[[i]][, -4, drop = FALSE]
-        yvals <- nrow(xi):1
-        plot(c(xi[, "lwr"], xi[, "upr"]), rep.int(yvals, 2), 
-            type = "n", axes = FALSE, xlab = "", ylab = "", ...)
-        axis(1, ...)
-        axis(2, at = nrow(xi):1, labels = dimnames(xi)[[1]], 
-            srt = 0, ...)
-        abline(h = yvals, lty = 1, lwd = 0, col = "lightgray")
-        abline(v = 0, lty = 2, lwd = 0, col="Blue", ...)
-        segments(xi[, "lwr"], yvals, xi[, "upr"], yvals, col="Red", ...)
-        segments(as.vector(xi), rep.int(yvals - 0.1, 3), as.vector(xi), 
-            rep.int(yvals + 0.1, 3), col="Red", ...)
-        if (is.null(main)) main = paste(format(100 * attr(x, "conf.level"), 2), "% family-wise confidence level\n", sep = "")
-        if (main=="") main=NULL
-        title(main = main, xlab = paste("Differences in mean levels of", names(x)[i]))
-        box()
-    }
+  for (i in seq_along(x)) {
+    xi <- x[[i]][, -4, drop = FALSE]
+    yvals <- nrow(xi):1
+    plot(c(xi[, "lwr"], xi[, "upr"]), rep.int(yvals, 2), 
+         type = "n", axes = FALSE, xlab = "", ylab = "", ...)
+    axis(1, ...)
+    axis(2, at = nrow(xi):1, labels = dimnames(xi)[[1]], 
+         srt = 0, ...)
+    abline(h = yvals, lty = 1, lwd = 0, col = "lightgray")
+    abline(v = 0, lty = 2, lwd = 0, col="Blue", ...)
+    segments(xi[, "lwr"], yvals, xi[, "upr"], yvals, col="Red", ...)
+    segments(as.vector(xi), rep.int(yvals - 0.1, 3), as.vector(xi), 
+             rep.int(yvals + 0.1, 3), col="Red", ...)
+    if (is.null(main)) main = paste(format(100 * attr(x, "conf.level"), 2), "% family-wise confidence level\n", sep = "")
+    if (main=="") main=NULL
+    title(main = main, xlab = paste("Differences in mean levels of", names(x)[i]))
+    box()
+  }
 }
 
 rescale<-function(x,newrange) {
- if(nargs() > 1 && is.numeric(x) && is.numeric(newrange)) {
-  # if newrange has max first, reverse it
-  if(newrange[1] > newrange[2]) {
-   newmin<-newrange[2]
-   newrange[2]<-newrange[1]
-   newrange[1]<-newmin
+  if(nargs() > 1 && is.numeric(x) && is.numeric(newrange)) {
+    # if newrange has max first, reverse it
+    if(newrange[1] > newrange[2]) {
+      newmin<-newrange[2]
+      newrange[2]<-newrange[1]
+      newrange[1]<-newmin
+    }
+    xrange<-range(x)
+    if(xrange[1] == xrange[2]) stop("can't rescale a constant vector!")
+    mfac<-(newrange[2]-newrange[1])/(xrange[2]-xrange[1])
+    invisible(newrange[1]+(x-xrange[1])*mfac)
   }
-  xrange<-range(x)
-  if(xrange[1] == xrange[2]) stop("can't rescale a constant vector!")
-  mfac<-(newrange[2]-newrange[1])/(xrange[2]-xrange[1])
-  invisible(newrange[1]+(x-xrange[1])*mfac)
- }
- else {
-  cat("Usage: rescale(x,newrange)\n")
-  cat("\twhere x is a numeric object and newrange is the min and max of the new range\n")
- }
+  else {
+    cat("Usage: rescale(x,newrange)\n")
+    cat("\twhere x is a numeric object and newrange is the min and max of the new range\n")
+  }
 }
 
 dkPlotNormality = function(x,...) {
   def.par <- par(no.readonly = TRUE); on.exit(par(def.par))
   layout(matrix(c(1,1,2,3), 2, 2, byrow=T), widths=c(2,1), heights=c(1,2))
-
+  
   xx = na.omit(x)
   xxhist = hist(xx, plot=F)
   xxarea = sum(diff(xxhist$breaks) * xxhist$counts)
@@ -360,7 +360,7 @@ dkROCPlotSetup = function(x,y, cutoff)
   roc.dx <<- density(x)
   roc.dy <<- density(y)
 }
-  
+
 dkROCPlotRefresh = function(x,y,cutoff)
 {
   sens <- mean(y > cutoff)
@@ -543,212 +543,212 @@ dkMakeEmptyPlot = function(msg="Drop variable(s) here")
 }
 
 dkPlotAnova = function(mydf, numeric1, factor1) {
-	def.par <- par(no.readonly = TRUE);	on.exit(par(def.par))
-    n = eval(parse(text=paste(mydf,"$",numeric1)))
-    f = eval(parse(text=paste(mydf,"$",factor1)))
-    x = anova(lm(n~f)) #aov(n~f))
-    layout(matrix(c(1,2,3), 3, 1, byrow=T))
-    dkPlotMeans2(n,f, main=paste("ANOVA p =",round(x$"Pr(>F)"[1],5)), xlab=factor1, ylab=paste("Mean of", numeric1))
-    boxplot(n~f,  varwidth=T, notch=T, horizontal=F)
-    mytukey = TukeyHSD(aov(n~f))
-    DKPlotTukey(mytukey)
+  def.par <- par(no.readonly = TRUE);	on.exit(par(def.par))
+  n = eval(parse(text=paste(mydf,"$",numeric1)))
+  f = eval(parse(text=paste(mydf,"$",factor1)))
+  x = anova(lm(n~f)) #aov(n~f))
+  layout(matrix(c(1,2,3), 3, 1, byrow=T))
+  dkPlotMeans2(n,f, main=paste("ANOVA p =",round(x$"Pr(>F)"[1],5)), xlab=factor1, ylab=paste("Mean of", numeric1))
+  boxplot(n~f,  varwidth=T, notch=T, horizontal=F)
+  mytukey = TukeyHSD(aov(n~f))
+  DKPlotTukey(mytukey)
 }
 
 intxplot = function (x, data = sys.parent[1], groups.in, scales, key.length = 1, 
-		key.lines, key = TRUE, trace.factor.name = deparse(substitute(groups.in)), 
-		x.factor.name = x.factor, xlab = x.factor.name, main = list(main.title, 
-				cex = main.cex), condition.name = "condition", panel = "panel.intxplot", 
-		summary.function = "sufficient", se, ..., data.is.summary = FALSE, 
-		main.title = paste("Interactions of", trace.factor.name, 
-				"and", x.factor.name, if (length(x[[3]]) > 1) paste("|", 
-							condition.name.to.use)), main.cex = 1.5) 
+                     key.lines, key = TRUE, trace.factor.name = deparse(substitute(groups.in)), 
+                     x.factor.name = x.factor, xlab = x.factor.name, main = list(main.title, 
+                                                                                 cex = main.cex), condition.name = "condition", panel = "panel.intxplot", 
+                     summary.function = "sufficient", se, ..., data.is.summary = FALSE, 
+                     main.title = paste("Interactions of", trace.factor.name, 
+                                        "and", x.factor.name, if (length(x[[3]]) > 1) paste("|", 
+                                                                                            condition.name.to.use)), main.cex = 1.5) 
 {
-	# taken from HH package
-	M <- sys.call()
-	M[[1]] <- as.name("xyplot")
-	groups <- eval(substitute(groups.in), data)
-	levels.groups <- levels(as.factor(groups))
-	if (length(x[[3]]) > 1) {
-		x.factor <- deparse(x[[3]][[2]])
-		M[[2]][[3]][[2]] <- parse(text = paste("as.numeric.positioned(", 
-						x.factor, ")"))[[1]]
-		condition.name.to.use <- if ((class(x[[3]][[3]]) == "name") && 
-						missing(condition.name)) 
-					deparse(x[[3]][[3]])
-				else condition.name
-		M$strip = parse(text = paste(sep = "", "function(..., var.name)", 
-						"strip.default(..., strip.names=c(TRUE,TRUE), var.name='", 
-						condition.name.to.use, "')"))[[1]]
-	}
-	else {
-		x.factor <- deparse(x[[3]])
-		M[[2]][[3]] <- parse(text = paste("as.numeric.positioned(", 
-						x.factor, ")"))[[1]]
-		condition.name.to.use <- ""
-	}
-	xf <- data[[x.factor]]
-	lev.x <- levels(xf)
-	num.lev.x <- position(xf)
-	y.name <- deparse(x[[2]])
-	if (data.is.summary) 
-		M$data <- data
-	else if (is.null(summary.function)) {
-	}
-	else if (is.character(summary.function)) {
-		switch(summary.function, sufficient = M$data <- sufficient(data, 
-						y = y.name, c(x.factor.name, trace.factor.name)), 
-				bwplot = stop("bwplot not yet implemented inside 'intxplot'."), 
-				stop(paste("summary function ", summary.function, 
-								" not known yet.", sep = "")))
-	}
-	else stop(paste("summary function ", deparse(substitute(summary.function)), 
-						" not known yet.", sep = ""))
-	M$scales <- list(x = list(at = num.lev.x, labels = lev.x, 
-					alternating = FALSE))
-	if (!missing(scales)) {
-		if (!is.null(scales$x)) 
-			M$scales$x[names(scales$x)] <- scales$x
-		if (!is.null(scales$y)) 
-			M$scales$y[names(scales$y)] <- scales$y
-		scales$x <- NULL
-		scales$y <- NULL
-		if (length(scales) > 0) 
-			M$scales[names(scales)] <- scales
-	}
-	if (missing(xlab)) 
-		M$xlab <- x.factor.name
-	tpg <- trellis.par.get("superpose.line")
-	if (key) {
-		key.index <- rep(1:length(tpg$col), length = length(levels.groups))
-		M$key <- list(lines = Rows(tpg, key.index), text = list(levels.groups), 
-				columns = key.length, title = trace.factor.name, 
-				cex.title = 1, space = "right", border = 1)
-	}
-	else M$key <- NULL
-	if (missing(main)) 
-		M$main <- list(main.title, cex = main.cex)
-	if (missing(panel)) 
-		M$panel <- panel
-	if (!missing(key.lines)) 
-		M$key$lines <- key.lines
-	M$key.length <- NULL
-	M$key.lines <- NULL
-	M$condition.name <- NULL
-	M$trace.factor.name <- NULL
-	M$x.factor.name <- NULL
-	M$main.title <- NULL
-	M$main.cex <- NULL
-	if (!missing(se)) {
-		if (!is.logical(substitute(se))) 
-			M$se <- eval(substitute(se), M$data)
-		else M$se <- M$data$sd/sqrt(M$data$nobs)
-	}
-	eval(M, sys.parent(1))
+  # taken from HH package
+  M <- sys.call()
+  M[[1]] <- as.name("xyplot")
+  groups <- eval(substitute(groups.in), data)
+  levels.groups <- levels(as.factor(groups))
+  if (length(x[[3]]) > 1) {
+    x.factor <- deparse(x[[3]][[2]])
+    M[[2]][[3]][[2]] <- parse(text = paste("as.numeric.positioned(", 
+                                           x.factor, ")"))[[1]]
+    condition.name.to.use <- if ((class(x[[3]][[3]]) == "name") && 
+                                   missing(condition.name)) 
+      deparse(x[[3]][[3]])
+    else condition.name
+    M$strip = parse(text = paste(sep = "", "function(..., var.name)", 
+                                 "strip.default(..., strip.names=c(TRUE,TRUE), var.name='", 
+                                 condition.name.to.use, "')"))[[1]]
+  }
+  else {
+    x.factor <- deparse(x[[3]])
+    M[[2]][[3]] <- parse(text = paste("as.numeric.positioned(", 
+                                      x.factor, ")"))[[1]]
+    condition.name.to.use <- ""
+  }
+  xf <- data[[x.factor]]
+  lev.x <- levels(xf)
+  num.lev.x <- position(xf)
+  y.name <- deparse(x[[2]])
+  if (data.is.summary) 
+    M$data <- data
+  else if (is.null(summary.function)) {
+  }
+  else if (is.character(summary.function)) {
+    switch(summary.function, sufficient = M$data <- sufficient(data, 
+                                                               y = y.name, c(x.factor.name, trace.factor.name)), 
+           bwplot = stop("bwplot not yet implemented inside 'intxplot'."), 
+           stop(paste("summary function ", summary.function, 
+                      " not known yet.", sep = "")))
+  }
+  else stop(paste("summary function ", deparse(substitute(summary.function)), 
+                  " not known yet.", sep = ""))
+  M$scales <- list(x = list(at = num.lev.x, labels = lev.x, 
+                            alternating = FALSE))
+  if (!missing(scales)) {
+    if (!is.null(scales$x)) 
+      M$scales$x[names(scales$x)] <- scales$x
+    if (!is.null(scales$y)) 
+      M$scales$y[names(scales$y)] <- scales$y
+    scales$x <- NULL
+    scales$y <- NULL
+    if (length(scales) > 0) 
+      M$scales[names(scales)] <- scales
+  }
+  if (missing(xlab)) 
+    M$xlab <- x.factor.name
+  tpg <- trellis.par.get("superpose.line")
+  if (key) {
+    key.index <- rep(1:length(tpg$col), length = length(levels.groups))
+    M$key <- list(lines = Rows(tpg, key.index), text = list(levels.groups), 
+                  columns = key.length, title = trace.factor.name, 
+                  cex.title = 1, space = "right", border = 1)
+  }
+  else M$key <- NULL
+  if (missing(main)) 
+    M$main <- list(main.title, cex = main.cex)
+  if (missing(panel)) 
+    M$panel <- panel
+  if (!missing(key.lines)) 
+    M$key$lines <- key.lines
+  M$key.length <- NULL
+  M$key.lines <- NULL
+  M$condition.name <- NULL
+  M$trace.factor.name <- NULL
+  M$x.factor.name <- NULL
+  M$main.title <- NULL
+  M$main.cex <- NULL
+  if (!missing(se)) {
+    if (!is.logical(substitute(se))) 
+      M$se <- eval(substitute(se), M$data)
+    else M$se <- M$data$sd/sqrt(M$data$nobs)
+  }
+  eval(M, sys.parent(1))
 }
 
 #kapler-meeier
 ggkm <- function(sfit, table=T, returns=F, xlabs='Time', ylabs='survival probability',
-        ystratalabs = NULL,ystrataname=NULL,timeby=100,main='Kaplan-Meier Plot',...){
-
-		
-#example
-#data(colon)
-#fit <- survfit(Surv(time,status)~rx, data=colon)
-#ggkm(fit, timeby=500)
-		
-		
-    require(ggplot2)
-    require(survival)
-    require(gridExtra)
-#     Create a blank plot for place-holding
-    blank_pic<- ggplot(df, aes(time,surv))+geom_blank()+theme_bw()+
-      opts(axis.text.x=theme_blank(), axis.text.y=theme_blank(),
-        axis.title.x=theme_blank(), axis.title.y=theme_blank(),
-        axis.ticks=theme_blank(), panel.grid.major=theme_blank(),
-        panel.border=theme_blank())
-
-#     Create Kaplan Meier plot
-    if(is.null(ystratalabs)) ystratalabs <- as.character(levels(summary(sfit)$strata))
-    (m<-max(nchar(ystratalabs)))
-    if(is.null(ystrataname)) ystrataname <- 'Strata'
-    times  <- seq(0, max(sfit$time), by=timeby)
-    df  <- data.frame(
-            time    =   sfit$time,
-            n.risk  =   sfit$n.risk,
-            n.event =   sfit$n.event,
-            surv    =   sfit$surv,
-            strata  =   summary(sfit, censored=T)$strata,
-            upper   =   sfit$upper,
-            lower   =   sfit$lower
-            )
-    levels(df$strata) <- ystratalabs
-    zeros <- data.frame(time=0, surv=1, strata = ystratalabs,
-            upper=1, lower=1)
-    df  <- rbind.fill(zeros, df)
-    d <- length(levels(df$strata))
-    p  <- ggplot(df, aes(time, surv, groups=strata))+
-        geom_step(aes(linetype=strata), size=0.6)+
-        theme_bw()+opts(axis.title.x=theme_text(vjust=0.5))+
-        scale_x_continuous(xlabs, breaks=times, limits = c(0, max(sfit$time)))+
-        scale_y_continuous(ylabs, limits = c(0,1))+
-        opts(panel.grid.minor = theme_blank())+
-        opts(legend.position=c(ifelse(m<10,.28,.35),ifelse(d < 4,.25,.35)))+
-        opts(legend.key=theme_rect(colour=NA))+
-        labs(linetype=ystrataname)+
-        opts(plot.margin = unit(c(0, 1, .5, ifelse(m<10,1.5,2.5)),'lines'))+
-        opts(title=main)
-    sdiff <- survdiff(eval(sfit$call$formula), data=eval(sfit$call$data))
-    pval <- pchisq(sdiff$chisq, length(sdiff$n)-1, lower.tail=F)
-    pvaltxt <- ifelse(pval < 0.0001, 'P < 0.0001',
-      paste('P =', signif(pval,2)))
-
-if(table){
-#     Create table graphic to include at-risk numbers
+                 ystratalabs = NULL,ystrataname=NULL,timeby=100,main='Kaplan-Meier Plot',...){
+  
+  
+  #example
+  #data(colon)
+  #fit <- survfit(Surv(time,status)~rx, data=colon)
+  #ggkm(fit, timeby=500)
+  
+  
+  require(ggplot2)
+  require(survival)
+  require(gridExtra)
+  #     Create a blank plot for place-holding
+  blank_pic<- ggplot(df, aes(time,surv))+geom_blank()+theme_bw()+
+    opts(axis.text.x=theme_blank(), axis.text.y=theme_blank(),
+         axis.title.x=theme_blank(), axis.title.y=theme_blank(),
+         axis.ticks=theme_blank(), panel.grid.major=theme_blank(),
+         panel.border=theme_blank())
+  
+  #     Create Kaplan Meier plot
+  if(is.null(ystratalabs)) ystratalabs <- as.character(levels(summary(sfit)$strata))
+  (m<-max(nchar(ystratalabs)))
+  if(is.null(ystrataname)) ystrataname <- 'Strata'
+  times  <- seq(0, max(sfit$time), by=timeby)
+  df  <- data.frame(
+    time    =   sfit$time,
+    n.risk  =   sfit$n.risk,
+    n.event =   sfit$n.event,
+    surv    =   sfit$surv,
+    strata  =   summary(sfit, censored=T)$strata,
+    upper   =   sfit$upper,
+    lower   =   sfit$lower
+  )
+  levels(df$strata) <- ystratalabs
+  zeros <- data.frame(time=0, surv=1, strata = ystratalabs,
+                      upper=1, lower=1)
+  df  <- rbind.fill(zeros, df)
+  d <- length(levels(df$strata))
+  p  <- ggplot(df, aes(time, surv, groups=strata))+
+    geom_step(aes(linetype=strata), size=0.6)+
+    theme_bw()+opts(axis.title.x=theme_text(vjust=0.5))+
+    scale_x_continuous(xlabs, breaks=times, limits = c(0, max(sfit$time)))+
+    scale_y_continuous(ylabs, limits = c(0,1))+
+    opts(panel.grid.minor = theme_blank())+
+    opts(legend.position=c(ifelse(m<10,.28,.35),ifelse(d < 4,.25,.35)))+
+    opts(legend.key=theme_rect(colour=NA))+
+    labs(linetype=ystrataname)+
+    opts(plot.margin = unit(c(0, 1, .5, ifelse(m<10,1.5,2.5)),'lines'))+
+    opts(title=main)
+  sdiff <- survdiff(eval(sfit$call$formula), data=eval(sfit$call$data))
+  pval <- pchisq(sdiff$chisq, length(sdiff$n)-1, lower.tail=F)
+  pvaltxt <- ifelse(pval < 0.0001, 'P < 0.0001',
+                    paste('P =', signif(pval,2)))
+  
+  if(table){
+    #     Create table graphic to include at-risk numbers
     risk.data  <- data.frame(strata = summary(sfit, times=times,
-                    extend=T)$strata,
-            time = summary(sfit, times=times, extend=T)$time,
-            n.risk = summary(sfit, times=times, extend=T)$n.risk)
+                                              extend=T)$strata,
+                             time = summary(sfit, times=times, extend=T)$time,
+                             n.risk = summary(sfit, times=times, extend=T)$n.risk)
     data_table  <-  ggplot(risk.data, aes(x=time, y=strata,
-                        label=format(n.risk, nsmall=0)))+#, color=strata))+
-                geom_text(size=3.5)+
-                theme_bw()+
-                scale_y_discrete(breaks=as.character(levels(risk.data$strata)),
-                labels=ystratalabs)+
-#                 scale_y_discrete(#format1ter = abbreviate,
-#                   breaks=1:3,
-#                   labels=ystratalabs)+
-                scale_x_continuous('Numbers at risk', limits=c(0, max(sfit$time)))+
-                opts(axis.title.x=theme_text(size=10, vjust=1))+
-                opts(panel.grid.major   =   theme_blank())+
-                opts(panel.grid.minor   =   theme_blank())+
-                opts(panel.border       =   theme_blank())+
-                opts(axis.text.x        =   theme_blank())+
-                opts(axis.ticks         =   theme_blank())+
-                opts(axis.text.y       =   theme_text(face='bold', hjust=1))
-
+                                          label=format(n.risk, nsmall=0)))+#, color=strata))+
+      geom_text(size=3.5)+
+      theme_bw()+
+      scale_y_discrete(breaks=as.character(levels(risk.data$strata)),
+                       labels=ystratalabs)+
+      #                 scale_y_discrete(#format1ter = abbreviate,
+      #                   breaks=1:3,
+      #                   labels=ystratalabs)+
+      scale_x_continuous('Numbers at risk', limits=c(0, max(sfit$time)))+
+      opts(axis.title.x=theme_text(size=10, vjust=1))+
+      opts(panel.grid.major   =   theme_blank())+
+      opts(panel.grid.minor   =   theme_blank())+
+      opts(panel.border       =   theme_blank())+
+      opts(axis.text.x        =   theme_blank())+
+      opts(axis.ticks         =   theme_blank())+
+      opts(axis.text.y       =   theme_text(face='bold', hjust=1))
+    
     data_table  <- data_table + opts(legend.position='none')+
-                                        xlab(NULL)+ylab(NULL)
-
+      xlab(NULL)+ylab(NULL)
+    
     data_table <- data_table+opts(plot.margin=unit(c(-1.5, 1, 0.1, ifelse(m<10,2.5,3.5)-0.28*m),'lines'))
-
-#     Plotting the graphs
+    
+    #     Plotting the graphs
     p <- ggplotGrob(p)
     p <- addGrob(p, textGrob(x=unit(.8, 'npc'), y=unit(.25,'npc'), label=pvaltxt,
-      gp=gpar(fontsize=12)))
+                             gp=gpar(fontsize=12)))
     grid.arrange(p, blank_pic, data_table, clip=F, nrow=3, ncol=1,
-      heights = unit(c(2,.1,.25), c('null','null','null')))
+                 heights = unit(c(2,.1,.25), c('null','null','null')))
     if(returns) {
       a <- arrangeGrob(p, blank_pic, data_table, clip=F, nrow=3, ncol=1,
-        heights = unit(c(2, .1, .25), c('null','null','null')))
+                       heights = unit(c(2, .1, .25), c('null','null','null')))
       return(a)
     }
-} else {
-  p <- ggplotGrob(p)
-  p <- addGrob(p, textGrob(x=unit(0.5,'npc'), y=unit(0.23,'npc'),
-    label=pvaltxt, gp=gpar(fontsize=12)))
-  grid.arrange(p)
-  if(returns) return(p)
-}
+  } else {
+    p <- ggplotGrob(p)
+    p <- addGrob(p, textGrob(x=unit(0.5,'npc'), y=unit(0.23,'npc'),
+                             label=pvaltxt, gp=gpar(fontsize=12)))
+    grid.arrange(p)
+    if(returns) return(p)
+  }
 }
 
 # for arranging multiple ggplots in 1
@@ -775,4 +775,21 @@ ggplotarrange <- function(..., nrow=NULL, ncol=NULL, as.table=FALSE) {
       ii.p <- ii.p + 1   
     } 
   } 
+}
+
+plot_odds<-function(x, title = NULL){
+  tmp<-data.frame(cbind(exp(coef(x)), exp(confint(x))))
+  odds<-tmp[-1,]
+  names(odds)<-c("OR", "lower", "upper")
+  odds$vars<-row.names(odds)
+  ticks<-c(seq(.1, 1, by =.1), seq(0, 10, by =1), seq(10, 100, by =10))
+  
+  ggplot(odds, aes(y= OR, x = reorder(vars, OR))) +
+    geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper), width=.2) +
+    scale_y_log10(breaks=ticks, labels = ticks) +
+    geom_hline(yintercept = 1, linetype=2) +
+    coord_flip() +
+    labs(title = title, x = "Variables", y = "OR") +
+    theme_bw()
 }

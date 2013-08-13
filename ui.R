@@ -9,6 +9,10 @@ source("R/dkutils.r")
 # shiny:::runApp("../shiny-explorer")
 
 data(iris)
+
+# for testing logistic regression
+mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
+
 # progressInit()
 
 # Define UI for dataset viewer application
