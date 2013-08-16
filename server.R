@@ -1,12 +1,8 @@
 library(shiny)
 library(datasets)
 require(knitr)
-require(markdown)
 require(brew)
 library(rCharts)
-library(gsubfn)
-library(highr)
-library(stringr)
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
@@ -147,27 +143,19 @@ shinyServer(function(input, output, session) {
     
     brewout = capture.output(brew(text=rmdsub))
     
-    render_markdown()
+    render_html() # this sets hooks to use highr
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),
       "<script>
-            //$('#analysis pre code').each(function(i, e) {hljs.highlightBlock(e)});
+            // javascript highlighting not needed if using render_html()
+            // $('#analysis pre code').each(function(i, e) {hljs.highlightBlock(e)});
+            
+            // Insert a TOC after the h1 title
             $('#analysis h1').after('<div id=\"toc\"></div>')
             generateTOC($('#toc')[0], $('#analysis')[0]);
         </script>", 
       sep = '\n')
     
-    # Why doesn't knit2html use highr?
-    myhtml = str_replace_all(myhtml, "&quot;", "\"")
-    myhtml = str_replace_all(myhtml, "&lt;", "<")
-    myhtml = str_replace_all(myhtml, "&gt;", ">")
-    myhtml = str_replace_all(myhtml, "&#39;", "'")
-    gsubfn("<pre><code class=\"r\">(.*?)</code></pre>", 
-           ~ paste("
-              <pre><code class=\"r\">",
-                   str_replace_all(paste(hilight(x, format="html"),collapse="\n"), "\n", "<br>"),
-                   "</code></pre>", sep=""),
-           myhtml)
   })
   
   # will need to change this to renderChart (not2) on new version

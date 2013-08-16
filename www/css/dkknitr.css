@@ -1,4 +1,13 @@
-#analysis pre {
+#analysis pre.knitr {
+    margin-top: 0;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+    padding: 0.5em;
+    line-height: 12pt
+}
+
+/*#analysis pre {
     margin-top: 0;
     max-width: 95%;
     border: 1px solid #ccc;
@@ -25,7 +34,7 @@
 
 #analysis code.r, code.cpp {
    background-color: #F8F8F8;
-}
+}*/
 
 .accordion-toggle {
   background-color: rgb(230,230,230);

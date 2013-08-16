@@ -1,7 +1,15 @@
 ```{r debug, echo=FALSE}
 require(ggplot2, quietly=T)
+require(highr)
 opts_chunk$set(comment="") # remove the comment symbol from knitr output
 opts_chunk$set(message=F, warning=F) # unless debugging
+
+# # the default output hook
+# hook_source = knit_hooks$get('source')
+# knit_hooks$set(source = function(x, options) {
+#   hook_source(x, options)
+#   hilight(x, format="html")
+# })
 ```
 # Analysis: 1 numeric
 
