@@ -86,7 +86,10 @@ with(mydf, cor.test(numeric1, numeric2, method="kendall"))
 
 ## Regression
 
-Regression fits a straight line to the data and finds it's slope. Regression tests check if the slope is different to 0.
+Regression fits a straight line to the data and finds it's slope. Regression tests check if the slope is different to 0. To interpret:
+- Check that the *model* p value is < 0.05
+- Examine the R squared value - this describes what proportion of the variability is explained by the model
+- Check the *parameter* p values - this measures if the parameter slope is significantly different from 0
 
 ```{r regression}
 mylm = lm(numeric2~numeric1, data=mydf)
@@ -96,6 +99,19 @@ summary(mylm)
 ```{r regressionplot}
 ggplot(mydf, aes(x=numeric1, y=numeric2)) + 
   geom_smooth(method="lm", colour="red", size=1)  
+```
+
+### Regression Diagnostics
+
+The following graph plots the residual values against the fitted values. The dotted line is the regression line rotated to become horizontal. The y axis measures the distance of each data point from the regression line. To meet the regression assumptions the graph should show the residuals are randomly distributed about the horizontal line:
+- The spread of the residuals does not change along the x axis (homoskedasticity)
+- The residuals are evenly positioned above and below the regression line along the x axis (there is no pattern to location)
+
+```{r}
+# fitted values-residual plot
+p2<- ggplot(mylm, aes(.fitted, .resid)) + 
+  geom_hline(yintercept=0, colour="purple", size=1) + geom_point() + 
+  geom_smooth(size=1, se =F)
 ```
 
 ```{r regressiondiag}
@@ -120,6 +136,15 @@ p4<- p2 + aes(size= .cooksd) +
   geom_hline(yintercept=0, colour="coral2", size=1)
 ggplotarrange(p1,p2,p3,p4,ncol=2)
 ```
+
+#### Check for outliers
+
+Are there any points that dramatically alter the 
+
+```{r}
+dfbeta(mylm)
+```
+
 
 ## Paired T-Test
 
