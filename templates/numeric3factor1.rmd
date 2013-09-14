@@ -46,3 +46,15 @@ kable(tbl, format="html", table.attr='class="data table table-bordered table-con
 ```
 
 <% } %>
+
+## Mixed effects models
+
+Used to perform linear regression where there are repeated measures from the same subject (factor1)
+
+```{r}
+require(lme4)
+mymodel = lmer(numeric1 ~ numeric2 + numeric3 + (1 | factor1), data= mydf)
+mymodel
+anova(mymodel, lmer(numeric1 ~ 1 + (1 | factor1), data = mydf))
+```
+

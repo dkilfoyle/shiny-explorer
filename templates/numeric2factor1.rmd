@@ -25,3 +25,14 @@ llply(.lm, anova)
 
 ### ANCOVA
 
+## Mixed effects models
+
+Used to perform linear regression where there are repeated measures from the same subject (factor1)
+
+```{r}
+require(lme4)
+mymodel = lmer(numeric1 ~ numeric2 + (1 | factor1), data= mydf)
+mymodel
+anova(mymodel, lmer(numeric1 ~ 1 + (1 | factor1), data = mydf))
+```
+
