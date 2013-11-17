@@ -20,20 +20,23 @@ shinyServer(function(input, output, session) {
     getdfinfo(input$dataset)
   })
   
+  # populate the field select boxes
   output$numericControls = renderUI({
     selectInput("numerics", "", choices=getDFInfo()$numerics$name, selected="", multiple=T)
   })
-  
   output$factorControls = renderUI({
     selectInput("factors", "", choices=getDFInfo()$factors$name, selected="", multiple=T)
   })
-  
   output$dateControls = renderUI({
     selectInput("dates", "", choices=getDFInfo()$dates$name, selected="", multiple=T)
   }) 
-  
   output$logicalControls = renderUI({
     selectInput("logicals", "", choices=getDFInfo()$logicals$name, selected="", multiple=T)
+  })
+  
+  observe({
+    input$numerics
+    session$sendCustomMessage(type='fieldsloaded', list(mymsg="Hello"))
   })
   
   # Populate the summary tab

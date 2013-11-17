@@ -7,6 +7,23 @@ source("R/dkutils.r")
 # to run
 # shiny:::runApp("../shiny-explorer")
 
+select2Input <- function(outputId, label, choices, selected=NULL, multiple=F) {
+  
+  tagList(
+    singleton(tags$head(
+      tags$script(src = 'www/js/shinySelect2.js'),
+      tags$script(src = 'www/js/select2/select2.js')
+    )),
+    pre(id=outputId, class="shiny-ace", 
+        style=paste("height:", 
+                    validateCssUnit(height)
+        )
+    ),
+    tags$script(type="text/javascript", HTML(js))
+  )
+}
+
+
 data(iris)
 
 # for testing logistic regression
