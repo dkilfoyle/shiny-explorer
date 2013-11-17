@@ -1,6 +1,4 @@
 library(shiny)
-library(rCharts)
-# library(shinyIncubator)
 source("R/dkdfinfo.r")
 source("R/dkgraph.r")
 source("R/dkutils.r")
@@ -68,7 +66,7 @@ shinyUI(pageWithSidebar(
               tableOutput("logicalInfo"),
               ## consider using tableplot from tabplot here,
               div(HTML("<hr>")),
-              chartOutput("mydt","datatables")
+              dataTableOutput("mydt")
       ),
       tabPanel("Analysis", 
                htmlOutput("analysis")

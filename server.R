@@ -2,7 +2,7 @@ library(shiny)
 library(datasets)
 require(knitr)
 require(brew)
-library(rCharts)
+#library(rCharts)
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
@@ -158,10 +158,6 @@ shinyServer(function(input, output, session) {
     
   })
   
-  # will need to change this to renderChart (not2) on new version
-  output$mydt = renderChart2({
-    dt = dTable(getSelectedDF())
-    return(dt)
-  })
+  output$mydt = renderDataTable({getSelectedDF()}, options=list(aLengthMenu = c(5, 10, 25), iDisplayLength = 5))
   
 })
