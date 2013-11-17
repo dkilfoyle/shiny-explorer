@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyAce)
 source("R/dkdfinfo.r")
 source("R/dkgraph.r")
 source("R/dkutils.r")
@@ -70,7 +71,9 @@ shinyUI(pageWithSidebar(
       ),
       tabPanel("Analysis", 
                htmlOutput("analysis")
-      )
+      ),
+      tabPanel("Source",
+               aceEditor("acermd", mode="markdown"))
     )
   )
 ))

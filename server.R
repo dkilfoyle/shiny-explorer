@@ -143,6 +143,8 @@ shinyServer(function(input, output, session) {
     
     brewout = capture.output(brew(text=rmdsub))
     
+    updateAceEditor(session, "acermd", mode="markdown", value=paste(brewout, collapse="\n"))
+    
     render_html() # this sets hooks to use highr
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),
