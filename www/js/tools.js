@@ -2,10 +2,10 @@
 <link href="css/dkknitr.css" rel="stylesheet"/>
 <script src="js/toc.js"></script>
 
-<link href="js/select2/select2.css" rel="stylesheet"/>
-<script src="js/select2/select2.js"></script>
-
 <script>
+/*
+// How to send javascript from R to client
+// R: session$sendCustomMessage(type='fieldsloaded', list(mymsg="Hello"))
 Shiny.addCustomMessageHandler("fieldsloaded",
   function(message) {
     console.log("fieldsloaded")
@@ -15,4 +15,18 @@ Shiny.addCustomMessageHandler("fieldsloaded",
     $("#logicals").select2({ width: 'resolve' });
   }
 );
+*/
+</script>
+
+<link href="js/select2/select2.css" rel="stylesheet"/>
+<script src="js/select2/select2.js"></script>
+
+<script>
+/* implement select2 support for the field selects */
+$(document).ready(function() {
+  $("#numerics").select2({ width: 'resolve' }); 
+  $("#factors").select2({ width: 'resolve' });
+  $("#dates").select2({ width: 'resolve' });
+  $("#logicals").select2({ width: 'resolve' }); 
+});
 </script>

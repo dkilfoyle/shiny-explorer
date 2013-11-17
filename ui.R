@@ -7,18 +7,14 @@ source("R/dkutils.r")
 # to run
 # shiny:::runApp("../shiny-explorer")
 
-select2Input <- function(outputId, label, choices, selected=NULL, multiple=F) {
+select2Input <- function(inputId, label, choices, selected=NULL, multiple=F) {
   
   tagList(
     singleton(tags$head(
       tags$script(src = 'www/js/shinySelect2.js'),
       tags$script(src = 'www/js/select2/select2.js')
     )),
-    pre(id=outputId, class="shiny-ace", 
-        style=paste("height:", 
-                    validateCssUnit(height)
-        )
-    ),
+    selectInput(inputId, label, choices, selected, multiple),
     tags$script(type="text/javascript", HTML(js))
   )
 }
@@ -47,12 +43,21 @@ shinyUI(pageWithSidebar(
                  "and select Update View to show an analysis."))
     ),
     
+#     div(class="accordion", id ="fieldsAccordion", 
+#         div(class="accordion-group", 
+#             buildAccordion("Numerics", uiOutput("numericControls"), expanded=T),
+#             buildAccordion("Factors",  uiOutput("factorControls")),
+#             buildAccordion("Dates",    uiOutput("dateControls")),  
+#             buildAccordion("Logicals", uiOutput("logicalControls"))
+#         )
+#     ),
+    
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
-            buildAccordion("Numerics", uiOutput("numericControls"), expanded=T),
-            buildAccordion("Factors",  uiOutput("factorControls")),
-            buildAccordion("Dates",    uiOutput("dateControls")),  
-            buildAccordion("Logicals", uiOutput("logicalControls"))
+            buildAccordion("Numerics", selectInput("numerics", "", choices=getdfinfo(getDataFrames()[1])$numerics$name, selected="", multiple=T), expanded=T),
+            buildAccordion("Factors",  selectInput("factors", "", choices=getdfinfo(getDataFrames()[1])$factors$name, selected="", multiple=T)),
+            buildAccordion("Dates",    selectInput("dates", "", choices=getdfinfo(getDataFrames()[1])$dates$name, selected="", multiple=T)),  
+            buildAccordion("Logicals", selectInput("logicals", "", choices=getdfinfo(getDataFrames()[1])$logicals$name, selected="", multiple=T))
         )
     ),
   
