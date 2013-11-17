@@ -43,15 +43,6 @@ shinyUI(pageWithSidebar(
                  "and select Update View to show an analysis."))
     ),
     
-#     div(class="accordion", id ="fieldsAccordion", 
-#         div(class="accordion-group", 
-#             buildAccordion("Numerics", uiOutput("numericControls"), expanded=T),
-#             buildAccordion("Factors",  uiOutput("factorControls")),
-#             buildAccordion("Dates",    uiOutput("dateControls")),  
-#             buildAccordion("Logicals", uiOutput("logicalControls"))
-#         )
-#     ),
-    
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
             buildAccordion("Numerics", selectInput("numerics", "", choices=getdfinfo(getDataFrames()[1])$numerics$name, selected="", multiple=T), expanded=T),
@@ -64,7 +55,14 @@ shinyUI(pageWithSidebar(
     # clear field selects via client side javascript only
     p(
       actionButton("go","GO!"),
-      HTML("<button class=\"btn\" onclick=\"$('#numerics option').each(function(i, e) { e.selected = false});\">Clear Selections</button>")
+      #HTML("<button class=\"btn\" onclick=\"$('#numerics option').each(function(i, e) { e.selected = false});\">Clear Selections</button>")
+      HTML("<button class=\"btn\" onclick=\"
+           $('#numerics').select2('val','');
+            $('#factors').select2('val','');
+            $('#dates').select2('val','');
+            $('#logicals').select2('val','');
+           ;
+           \">Clear Selections</button>")
     ),
     
     # TODO: the panel doesn't get hidden once shiny-busy class is removed ?why

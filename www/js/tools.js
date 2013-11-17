@@ -24,9 +24,9 @@ Shiny.addCustomMessageHandler("fieldsloaded",
 <script>
 /* implement select2 support for the field selects */
 $(document).ready(function() {
-  $("#numerics").select2({ width: 'resolve' }); 
-  $("#factors").select2({ width: 'resolve' });
-  $("#dates").select2({ width: 'resolve' });
-  $("#logicals").select2({ width: 'resolve' }); 
+  $("#numerics").select2({ width: 'resolve', placeholder: 'Select numeric(s)' }); 
+  $("#factors").select2({ width: 'resolve', placeholder: 'Select factor(s)' });
+  $("#dates").select2({ width: 'resolve', placeholder: 'Select date(s)' });
+  $("#logicals").select2({ width: 'resolve', placeholder: 'Select logical(s)' }); 
 });
 </script>

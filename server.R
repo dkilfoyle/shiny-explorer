@@ -36,8 +36,6 @@ shinyServer(function(input, output, session) {
     output$logicalInfo = renderTable(dfinfo$logicals[,-1])
   })
   
-
-  
   observe({
     if (input$go != 0) {
       # show the Analysis tab panel
