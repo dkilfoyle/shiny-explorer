@@ -12,9 +12,6 @@ Shiny.addCustomMessageHandler("hidemsg",
     $("#kniting").hide();
   }
 );
-$(document).ready(function() {
-  $("#kniting").hide(); 
-});
 </script>
 
 <link href="js/select2/select2.css" rel="stylesheet"/>

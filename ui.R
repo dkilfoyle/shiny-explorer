@@ -49,7 +49,7 @@ shinyUI(pageWithSidebar(
            \">Clear Selections</button>")
     ),
     
-    p(div(id="kniting", class="alert alert-info", "Kniting report"))
+    p(div(id="kniting", class="alert alert-info", style="display: none", "Kniting report"))
   ),
 
   mainPanel(
