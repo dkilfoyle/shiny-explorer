@@ -52,6 +52,8 @@ shinyServer(function(input, output, session) {
     #    on.exit(progress$close())
     #    progress$set(message="Knitting!",detail="bla bla bla")
     
+    session$sendCustomMessage(type="showmsg", list(mymsg="Hello"))
+    
     isolate({
       # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
       # instead wait until go button pressed
@@ -151,6 +153,10 @@ shinyServer(function(input, output, session) {
             generateTOC($('#toc')[0], $('#analysis')[0]);
         </script>", 
       sep = '\n')
+    
+    session$sendCustomMessage(type="hidemsg", list(mymsg="Hello"))
+    
+    return(myhtml)
     
   })
   

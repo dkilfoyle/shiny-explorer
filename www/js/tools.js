@@ -14,8 +14,20 @@ Shiny.addCustomMessageHandler("fieldsloaded",
     $("#dates").select2({ width: 'resolve' });
     $("#logicals").select2({ width: 'resolve' });
   }
+);*/
+Shiny.addCustomMessageHandler("showmsg",
+  function(message) {
+    $("#kniting").show();
+  }
 );
-*/
+Shiny.addCustomMessageHandler("hidemsg",
+  function(message) {
+    $("#kniting").hide();
+  }
+);
+$(document).ready(function() {
+  $("#kniting").hide(); 
+});
 </script>
 
 <link href="js/select2/select2.css" rel="stylesheet"/>

@@ -40,7 +40,7 @@ shinyUI(pageWithSidebar(
     wellPanel(
       selectInput("dataset", "Dataframe:", choices = getDataFrames()),
       p(helpText("Choose the desired fields in the dropdowns",
-                 "and select Update View to show an analysis."))
+                 "and click Analyse to show an analysis."))
     ),
     
     div(class="accordion", id ="fieldsAccordion", 
@@ -54,7 +54,7 @@ shinyUI(pageWithSidebar(
   
     # clear field selects via client side javascript only
     p(
-      actionButton("go","GO!"),
+      actionButton("go",strong("Analyse")), # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
       #HTML("<button class=\"btn\" onclick=\"$('#numerics option').each(function(i, e) { e.selected = false});\">Clear Selections</button>")
       HTML("<button class=\"btn\" onclick=\"
            $('#numerics').select2('val','');
@@ -66,9 +66,11 @@ shinyUI(pageWithSidebar(
     ),
     
     # TODO: the panel doesn't get hidden once shiny-busy class is removed ?why
-    conditionalPanel(condition="$('html').hasClass('shiny-busy')",
-                     br(),
-                     div(class="alert alert-info", "Kniting report"))
+#     conditionalPanel(condition="$('html').hasClass('shiny-busy')",
+#                      br(),
+#                      div(class="alert alert-info", "Kniting report"))
+    br(),
+    div(id="kniting", class="alert alert-info", "Kniting report")
   ),
 
   mainPanel(
