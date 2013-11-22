@@ -7,19 +7,6 @@ source("R/dkutils.r")
 # to run
 # shiny:::runApp("../shiny-explorer")
 
-select2Input <- function(inputId, label, choices, selected=NULL, multiple=F) {
-  
-  tagList(
-    singleton(tags$head(
-      tags$script(src = 'www/js/shinySelect2.js'),
-      tags$script(src = 'www/js/select2/select2.js')
-    )),
-    selectInput(inputId, label, choices, selected, multiple),
-    tags$script(type="text/javascript", HTML(js))
-  )
-}
-
-
 data(iris)
 
 # for testing logistic regression
@@ -54,29 +41,21 @@ shinyUI(pageWithSidebar(
   
     # clear field selects via client side javascript only
     p(
-      actionButton("go",strong("Analyse")), # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
-      #HTML("<button class=\"btn\" onclick=\"$('#numerics option').each(function(i, e) { e.selected = false});\">Clear Selections</button>")
+      # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
+      actionButton("go",strong("Analyse")), 
+      
       HTML("<button class=\"btn\" onclick=\"
-           $('#numerics').select2('val','');
-            $('#factors').select2('val','');
-            $('#dates').select2('val','');
-            $('#logicals').select2('val','');
-           ;
+            $('#numerics').select2('val',''); $('#factors').select2('val',''); $('#dates').select2('val',''); $('#logicals').select2('val','');
            \">Clear Selections</button>")
     ),
     
-    # TODO: the panel doesn't get hidden once shiny-busy class is removed ?why
-#     conditionalPanel(condition="$('html').hasClass('shiny-busy')",
-#                      br(),
-#                      div(class="alert alert-info", "Kniting report"))
-    br(),
-    div(id="kniting", class="alert alert-info", "Kniting report")
+    p(div(id="kniting", class="alert alert-info", "Kniting report"))
   ),
 
   mainPanel(
     
     includeHTML("www/js/tools.js"),
-    
+
     tabsetPanel(id="mainPanelTabset",
       tabPanel("Summary", 
               h4("Numerics"),

@@ -1,20 +1,7 @@
 <script src="js/highlight.pack.js"></script>
-<link href="css/dkknitr.css" rel="stylesheet"/>
 <script src="js/toc.js"></script>
 
 <script>
-/*
-// How to send javascript from R to client
-// R: session$sendCustomMessage(type='fieldsloaded', list(mymsg="Hello"))
-Shiny.addCustomMessageHandler("fieldsloaded",
-  function(message) {
-    console.log("fieldsloaded")
-    $("#numerics").select2({ width: 'resolve' });
-    $("#factors").select2({ width: 'resolve' });
-    $("#dates").select2({ width: 'resolve' });
-    $("#logicals").select2({ width: 'resolve' });
-  }
-);*/
 Shiny.addCustomMessageHandler("showmsg",
   function(message) {
     $("#kniting").show();
@@ -42,3 +29,5 @@ $(document).ready(function() {
   $("#logicals").select2({ width: 'resolve', placeholder: 'Select logical(s)' }); 
 });
 </script>
+
+<link href="css/dkknitr.css" rel="stylesheet"/>
