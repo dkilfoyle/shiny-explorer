@@ -6,6 +6,7 @@ source("R/dkutils.r")
 
 # to run
 # shiny:::runApp("../shiny-explorer")
+# shiny:::runApp("../shiny-explorer", aunch.browser = rstudio::viewer)
 
 data(iris)
 
