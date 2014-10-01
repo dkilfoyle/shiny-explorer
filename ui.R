@@ -13,8 +13,6 @@ data(iris)
 # for testing logistic regression
 mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
-# progressInit()
-
 # Define UI for dataset viewer application
 shinyUI(pageWithSidebar(
   
@@ -30,6 +28,9 @@ shinyUI(pageWithSidebar(
       p(helpText("Choose the desired fields in the dropdowns",
                  "and click Analyse to show an analysis."))
     ),
+    
+    # jqueryui needed for selectize plugins
+    tagList(singleton(tags$head(tags$script(src="js/jquery-ui-1.10.3.custom.min.js")))),
     
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
