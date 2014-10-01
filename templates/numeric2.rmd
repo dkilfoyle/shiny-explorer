@@ -108,33 +108,7 @@ The following graph plots the residual values against the fitted values. The dot
 - The residuals are evenly positioned above and below the regression line along the x axis (there is no pattern to location)
 
 ```{r}
-# fitted values-residual plot
-p2<- ggplot(mylm, aes(.fitted, .resid)) + 
-  geom_hline(yintercept=0, colour="purple", size=1) + geom_point() + 
-  geom_smooth(size=1, se =F)
-```
-
-```{r regressiondiag}
-# debug
-#mydf=iris
-#mydf$numeric1 = iris$Petal.Length
-#mydf$numeric2 = iris$Petal.Width
-
-#lm regression line with confidence band
-p1<- ggplot(mydf, aes(x=numeric1, y=numeric2)) + 
-  geom_smooth(method="lm", colour="red", size=1)  
-# fitted values-residual plot
-p2<- ggplot(mylm, aes(.fitted, .resid)) + 
-  geom_hline(yintercept=0, colour="purple", size=1) + geom_point() + 
-  geom_smooth(size=1, se =F)
-# fitted values-standardized residual plot
-p3<- p2 + aes(y= .stdresid) +
-  geom_hline(yintercept=0, colour="orange", size=1)
-# Cook's distance, with size proportional to distance
-p4<- p2 + aes(size= .cooksd) +
-  scale_area("Cook's distance") +
-  geom_hline(yintercept=0, colour="coral2", size=1)
-ggplotarrange(p1,p2,p3,p4,ncol=2)
+autoplot(mylm, which=1:6, mfrow=c(3,2))
 ```
 
 #### Check for outliers
