@@ -59,6 +59,8 @@ shinyUI(pageWithSidebar(
            \">Clear Selections</button>")
     ),
     
+    # custom Progress notification
+    tagList(singleton(tags$head(tags$script(src="js/customProgress.js")))),
     p(div(id="kniting", class="alert alert-info", style="display: none", "Kniting report"))
   ),
 
