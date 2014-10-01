@@ -11,7 +11,7 @@ source("R/dkutils.r")
 data(iris)
 
 # for testing logistic regression
-mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
+#mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
 # Define UI for dataset viewer application
 shinyUI(pageWithSidebar(
@@ -20,6 +20,8 @@ shinyUI(pageWithSidebar(
   headerPanel(""),
   
   sidebarPanel(
+    
+    includeCSS("www/css/dkknitr.css"),
     
     h2("Shiny Explorer"),
     
