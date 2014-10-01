@@ -51,16 +51,10 @@ shinyUI(pageWithSidebar(
         )
     ),
   
-    # clear field selects via client side javascript only
     p(
       # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
       actionButton("go",strong("Analyse")), 
-      
       actionButton("deleteSelections", "Clear Selections")
-      
-#       HTML("<button class=\"btn\" onclick=\"
-#             $('#numerics').select2('val',''); $('#factors').select2('val',''); $('#dates').select2('val',''); $('#logicals').select2('val','');
-#            \">Clear Selections</button>")
     ),
     
     # custom Progress notification
