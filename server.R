@@ -24,28 +24,31 @@ shinyServer(function(input, output, session) {
     dfinfo = getdfinfo(input$dataset)
     
     # Update the field selects
-    updateSelectInput(session, "numerics", "", choices=dfinfo$numerics$name, selected="")
-    updateSelectInput(session, "factors", "", choices=dfinfo$factors$name, selected="")
-    updateSelectInput(session, "dates", "", choices=dfinfo$dates$name, selected="")
-    updateSelectInput(session, "logicals", "", choices=dfinfo$logicals$name, selected="")
+    updateSelectInput(session, "numerics", choices=dfinfo$numerics$name)
+    updateSelectInput(session, "factors", choices=dfinfo$factors$name)
+    updateSelectInput(session, "dates", choices=dfinfo$dates$name)
+    updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
     
     # Populate the summary tab
     if (length(dfinfo$numerics$name)==0)
       output$numericInfo = renderText({"There are no numeric fields"})
     else
-      output$numericInfo = renderTable(dfinfo$numerics[,-1])
+      output$numericInfo = renderTable(as.data.frame(dfinfo$numerics)[,-1])
+    
     if (length(dfinfo$factors$name)==0)
       output$factorInfo = renderText({"There are no factor fields"})
     else
-      output$factorInfo = renderTable(dfinfo$factors[,-1])
+      output$factorInfo = renderTable(as.data.frame(dfinfo$factors)[,-1])
+    
     if (length(dfinfo$dates$name)==0)
       output$dateInfo = renderText({"There are no date fields"})
     else
-      output$dateInfo = renderTable(dfinfo$dates[,-1])
+      output$dateInfo = renderTable(as.data.frame(dfinfo$dates)[,-1])
+    
     if (length(dfinfo$logicals$name)==0)
       output$logicalInfo = renderText({"There are no logical fields"})
     else
-      output$logicalInfo = renderTable(dfinfo$logicals[,-1])
+      output$logicalInfo = renderTable(as.data.frame(dfinfo$logicals)[,-1])
   })
   
   observe({

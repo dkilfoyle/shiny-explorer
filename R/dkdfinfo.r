@@ -14,15 +14,15 @@ getdfinfo = function(dfn)
   fields.date = fields[fields.type %in% c("date")]
   
   getdfinfo = list(
-    numerics = data.frame(name=fields.numeric,
+    numerics = list(name=as.vector(fields.numeric),
       mean=sapply(fields.numeric, function(x) { round(mean(mydf[,x], na.rm=T),2) } ),
       min =sapply(fields.numeric, function(x) { min(mydf[,x], na.rm=T)}),
       max =sapply(fields.numeric, function(x) { max(mydf[,x], na.rm=T) }),
       NAs =sapply(fields.numeric, function(x) { sum(is.na(mydf[,x])) } )),
-    factors = data.frame(name=fields.factor,
+    factors = list(name=as.vector(fields.factor),
       nlevels = sapply(fields.factor, function(x) { nlevels(mydf[,x]) }),
       NAs = sapply(fields.factor, function(x) { sum(is.na(mydf[,x])) })),
-    logicals = data.frame(name=fields.logical,
+    logicals = list(name=as.vector(fields.logical),
       mean = sapply(fields.logical, function(x) {
         xx = mydf[,x]
         if (is.factor(xx)) {
@@ -31,7 +31,7 @@ getdfinfo = function(dfn)
         }
         mean(xx, na.rm=T)    
       })),
-    dates = data.frame(name=fields.date,
+    dates = list(name=as.vector(fields.date),
       min = sapply(fields.date, function(x) { min(mydf[,x], na.rm=T) }),
       max = sapply(fields.date, function(x) { max(mydf[x], na.rm=T) }),
       NAs = sapply(fields.date, function(x) { sum(is.na(mydf[,x])) }))

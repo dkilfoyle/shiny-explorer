@@ -33,10 +33,18 @@ shinyUI(pageWithSidebar(
     
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
-            buildAccordion("Numerics", selectInput("numerics", "", choices=getdfinfo(getDataFrames()[1])$numerics$name, selected="", multiple=T), expanded=T),
-            buildAccordion("Factors",  selectInput("factors", "", choices=getdfinfo(getDataFrames()[1])$factors$name, selected="", multiple=T)),
-            buildAccordion("Dates",    selectInput("dates", "", choices=getdfinfo(getDataFrames()[1])$dates$name, selected="", multiple=T)),  
-            buildAccordion("Logicals", selectInput("logicals", "", choices=getdfinfo(getDataFrames()[1])$logicals$name, selected="", multiple=T))
+            buildAccordion("Numerics", 
+                           selectizeInput("numerics", "", choices=getdfinfo(getDataFrames()[1])$numerics$name, selected="", multiple=T,
+                                       options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
+            buildAccordion("Factors",  
+                           selectizeInput("factors", "", choices=getdfinfo(getDataFrames()[1])$factors$name, selected="", multiple=T,
+                                       options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
+            buildAccordion("Dates",    
+                           selectizeInput("dates", "", choices=getdfinfo(getDataFrames()[1])$dates$name, selected="", multiple=T, 
+                                       options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
+            buildAccordion("Logicals", 
+                           selectizeInput("logicals", "", choices=getdfinfo(getDataFrames()[1])$logicals$name, selected="", multiple=T,
+                                       options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))))
         )
     ),
   
