@@ -58,6 +58,17 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  observe({
+    if (input$deleteSelections != 0) {
+      # clear the selected fields
+      dfinfo = getdfinfo(input$dataset)
+      updateSelectInput(session, "numerics", choices=dfinfo$numerics$name)
+      updateSelectInput(session, "factors", choices=dfinfo$factors$name)
+      updateSelectInput(session, "dates", choices=dfinfo$dates$name)
+      updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
+    }
+  })
+  
   output$analysis = renderText({
     
     if (input$go == 0)
