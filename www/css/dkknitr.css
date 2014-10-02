@@ -1,4 +1,14 @@
-#analysis pre.knitr {
+#analysis .source pre.knitr {
+    margin-top: 0;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+    padding: 0.5em;
+    line-height: 12pt;
+    background-color: white;
+}
+
+#analysis .output pre.knitr {
     margin-top: 0;
     max-width: 100%;
     border: 1px solid #ccc;
