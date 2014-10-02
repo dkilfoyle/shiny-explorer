@@ -21,3 +21,10 @@ dkpval = function(myp) {
   if (myp < 0.05) return("p < 0.05")
   return(sprintf("p = %.2f", myp))
 }
+
+dkReplace = function(mysource, myreplaces) {
+  for (x in names(myreplaces)) {
+    mysource = gsub(x, myreplaces[x], mysource)
+  }
+  return(mysource)
+}

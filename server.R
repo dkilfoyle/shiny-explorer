@@ -96,76 +96,61 @@ shinyServer(function(input, output, session) {
     
     if ((length(numerics) == 0) & (length(factors)==1)) {
       rmdsource = paste(readLines("templates/factor1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)       
-      rmdsub = gsub("factor1", factors[1], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, factor1=factors[1]))
     }
     
     if ((length(numerics) == 0) & (length(factors)==2)) {
       rmdsource = paste(readLines("templates/factor2.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("factor1", factors[1], rmdsub)
-      rmdsub = gsub("factor2", factors[2], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, factor1=factors[1], factor2=factors[2]))
     }
     
     if ((length(numerics) == 1) & (length(factors)==0)) {
       rmdsource = paste(readLines("templates/numeric1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numeric1", numerics[1], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numeric1=numerics[1]))
     }
     
     if ((length(numerics) == 1) & (length(factors)==1)) {
       rmdsource = paste(readLines("templates/numeric1factor1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numeric1", numerics[1], rmdsub)
-      rmdsub = gsub("factor1", factors[1], rmdsub)  
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numeric1=numerics[1], factor1=factors[1]))
     }
     
     if ((length(numerics) == 1) & (length(factors)==2)) {
       rmdsource = paste(readLines("templates/numeric1factor2.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numeric1", numerics[1], rmdsub)
-      rmdsub = gsub("factor1", factors[1], rmdsub)  
-      rmdsub = gsub("factor2", factors[2], rmdsub) 
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numeric1=numerics[1], factor1=factors[1], factor2=factors[2]))
     }
     
     if ((length(numerics) == 2) & (length(factors)==0)) {
       rmdsource = paste(readLines("templates/numeric2.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numeric1", numerics[1], rmdsub)
-      rmdsub = gsub("numeric2", numerics[2], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numeric1=numerics[1], numeric2=numerics[2]))
     }
     
     if ((length(numerics) > 2) & (length(factors)==0)) {
       rmdsource = paste(readLines("templates/numeric3.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numericlist", paste('c("', paste(numerics, collapse='","'), '")', sep=""), rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numericlist=paste('c("', paste(numerics, collapse='","'), '")', sep=""))) 
     }
     
     if ((length(numerics) == 2) & (length(factors) == 1)) {
       rmdsource = paste(readLines("templates/numeric2factor1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numeric1", numerics[1], rmdsub)
-      rmdsub = gsub("numeric2", numerics[2], rmdsub)  
-      rmdsub = gsub("factor1", factors[1], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numeric1=numerics[1], numeric2=numerics[2], factor1=factors[1]))
     } 
     
     if ((length(numerics) > 2) & (length(factors)==1)) {
       rmdsource = paste(readLines("templates/numeric3factor1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("numericlist", paste('c("', paste(numerics, collapse='","'), '")', sep=""), rmdsub)
-      rmdsub = gsub("factor1", factors[1], rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, numericlist=paste('c("', paste(numerics, collapse='","'), '")', sep=""), factor1=factors[1])) 
     }
     
     if ((length(logicals) == 1) & (length(factors) > 0)) {
       rmdsource = paste(readLines("templates/logical1.rmd"), collapse="\n")
-      rmdsub = gsub("mydf", dfstr, rmdsource)
-      rmdsub = gsub("logical1", logicals[1], rmdsub)
-      rmdsub = gsub("factorlist", paste('c("', paste(factors, collapse='","'), '")', sep=""), rmdsub)
+      rmdsub = dkReplace(rmdsource, c(mydf=dfstr, logical1=logicals[1], factorlist=paste('c("', paste(factors, collapse='","'), '")', sep="")))
     }
     
     brewout = capture.output(brew(text=rmdsub))
     
     updateAceEditor(session, "acermd", mode="markdown", value=paste(brewout, collapse="\n"))
+    
+    # TODO: write brewout to temporary file then use rmarkdown render
+    # library(rmarkdown)
+    # render("tempfile.rmd", html_fragment(toc=T))
     
     render_html() # this sets hooks to use highr
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
