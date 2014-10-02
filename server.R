@@ -144,13 +144,18 @@ shinyServer(function(input, output, session) {
       rmdsub = dkReplace(rmdsource, c(mydf=dfstr, logical1=logicals[1], factorlist=paste('c("', paste(factors, collapse='","'), '")', sep="")))
     }
     
+    # Some templates have conditional segements - hence use brew 
+    # TODO: explore using whiskers instead of dkReplace/brew
     brewout = capture.output(brew(text=rmdsub))
     
     updateAceEditor(session, "acermd", mode="markdown", value=paste(brewout, collapse="\n"))
     
-    # TODO: write brewout to temporary file then use rmarkdown render
-    # library(rmarkdown)
-    # render("tempfile.rmd", html_fragment(toc=T))
+    # EXPERIMENT: rmarkdown version
+    # Outcome: no particular advantage, require extra files and highlighting js = not used
+#     writeLines(brewout, con=file("temp.rmd"))
+#     library(rmarkdown)
+#     render("temp.rmd", html_fragment(toc=T))
+#     myhtml = paste(readLines("temp.html"), collapse="\n")
     
     render_html() # this sets hooks to use highr
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
