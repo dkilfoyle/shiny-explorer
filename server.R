@@ -170,8 +170,7 @@ shinyServer(function(input, output, session) {
       sep = '\n')
     
     
-    # Deprecated: old progress code
-    #session$sendCustomMessage(type="hidemsg", list(mymsg="Hello"))
+
     progress$inc()
     
     return(myhtml)
