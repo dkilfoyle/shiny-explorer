@@ -55,11 +55,9 @@ shinyUI(pageWithSidebar(
       # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
       actionButton("go",strong("Analyse")), 
       actionButton("deleteSelections", "Clear Selections")
-    ),
+    )
     
-    # custom Progress notification
-    tagList(singleton(tags$head(tags$script(src="js/customProgress.js")))),
-    p(div(id="kniting", class="alert alert-info", style="display: none", "Kniting report"))
+
   ),
 
   mainPanel(

@@ -74,11 +74,9 @@ shinyServer(function(input, output, session) {
     if (input$go == 0)
       return("Select some fields first")
     
-    #    progress = Progress$new(session,min=1,max=2)
-    #    on.exit(progress$close())
-    #    progress$set(message="Knitting!",detail="bla bla bla")
-    
-    session$sendCustomMessage(type="showmsg", list(mymsg="Hello"))
+    progress = shiny::Progress$new(session, min=1, max=3)
+    on.exit(progress$close())
+    progress$set(message="Building report")
     
     isolate({
       # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
@@ -146,6 +144,7 @@ shinyServer(function(input, output, session) {
     
     # Some templates have conditional segements - hence use brew 
     # TODO: explore using whiskers instead of dkReplace/brew
+    progress$inc()
     brewout = capture.output(brew(text=rmdsub))
     
     updateAceEditor(session, "acermd", mode="markdown", value=paste(brewout, collapse="\n"))
@@ -170,7 +169,10 @@ shinyServer(function(input, output, session) {
         </script>", 
       sep = '\n')
     
-    session$sendCustomMessage(type="hidemsg", list(mymsg="Hello"))
+    
+    # Deprecated: old progress code
+    #session$sendCustomMessage(type="hidemsg", list(mymsg="Hello"))
+    progress$inc()
     
     return(myhtml)
     
