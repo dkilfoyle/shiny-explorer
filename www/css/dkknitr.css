@@ -46,9 +46,17 @@
    background-color: #F8F8F8;
 }*/
 
-.accordion-toggle {
+.panel-body {
+  background-color: rgb(245,245,245);
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.panel-default>.panel-heading {
   background-color: rgb(230,230,230);
 }
+
+
 
 
    pre .operator,

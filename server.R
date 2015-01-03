@@ -8,7 +8,7 @@ require(brew)
 shinyServer(function(input, output, session) {
   
   getSelectedDF <- reactive({
-    eval(parse(text=input$dataset))
+    eval(parse(text=input$dataset)) 
   })
   
   observe({
