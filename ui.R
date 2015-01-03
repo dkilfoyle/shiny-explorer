@@ -38,16 +38,16 @@ shinyUI(pageWithSidebar(
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
             buildAccordion("Numerics", 
-                           selectizeInput("numerics", label="", choices=c(), selected="", multiple=T, #NB: choices is filled by observing input$dataset
-                                       options=list(valueField="name", labelField="name", placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
+                           selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
+                                       options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
             buildAccordion("Factors",  
-                           selectizeInput("factors", label="", choices=c(), selected="", multiple=T,
+                           selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
                                        options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
             buildAccordion("Dates",    
-                           selectizeInput("dates", label="", choices=c(), selected="", multiple=T, 
+                           selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
                                        options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
             buildAccordion("Logicals", 
-                           selectizeInput("logicals", label="", choices=c(), selected="", multiple=T,
+                           selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
                                        options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))))
         )
     ),
