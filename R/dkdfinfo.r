@@ -38,6 +38,16 @@ getdfinfo = function(dfn)
   )
 }
 
+getNumerics = function(dfn) {
+  mydf = get(dfn)
+  fields = names(mydf)
+  fields.type = sapply(fields, getVectorType, mydf)
+  fields.numeric = fields[fields.type %in% c("numeric","integer","double", "logical")]
+  fields.summary = sapply(fields.numeric, function(x) { mean(mydf[,x], na.rm=T) })
+  return(fields.numeric) # for now until updateselectize server=T is fixed
+  return(data.frame(name=fields.numeric, mpg=fields.summary))
+}
+
 getVectorType = function(field, mydf)
 {
   x = "Unknown"

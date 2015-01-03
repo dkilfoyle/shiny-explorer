@@ -14,8 +14,21 @@ shinyServer(function(input, output, session) {
   observe({
     dfinfo = getdfinfo(input$dataset)
     
+    # TODO: something wrong with updateSelectize server=T - file bug
+    
     # Update the field selects
-    updateSelectInput(session, "numerics", choices=dfinfo$numerics$name)
+    updateSelectizeInput(session, "numerics", choices=getNumerics(input$dataset), server=F,
+                         options=list(
+                           placeholder="Select numeric(s)",
+                           dropdownParent = "body",
+                           plugins=list(remove_button="", drag_drop="")
+#                            render = I(sprintf(
+#                             "{
+#                                option: function(item, escape) {
+#                                 return '<div>' + escape(item.name) '</div>';
+#                              }
+#                             }"))
+                         ))
     updateSelectInput(session, "factors", choices=dfinfo$factors$name)
     updateSelectInput(session, "dates", choices=dfinfo$dates$name)
     updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
