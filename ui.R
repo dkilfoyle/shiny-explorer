@@ -35,8 +35,7 @@ shinyUI(pageWithSidebar(
     # jqueryui needed for selectize plugins
     tagList(singleton(tags$head(tags$script(src="js/jquery-ui-1.10.3.custom.min.js")))),
     
-    div(class="accordion", id ="fieldsAccordion", 
-        div(class="accordion-group", 
+    div(class="panel-group", id ="fieldsAccordion", 
             buildAccordion("Numerics", 
                            selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
                                        options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
@@ -49,7 +48,6 @@ shinyUI(pageWithSidebar(
             buildAccordion("Logicals", 
                            selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
                                        options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))))
-        )
     ),
   
     p(
