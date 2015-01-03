@@ -7,17 +7,8 @@ require(brew)
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
   
-  # Return the requested dataset
-  getSelectedDFName <- reactive({
-    input$dataset
-  })
-  
   getSelectedDF <- reactive({
-    eval(parse(text=getSelectedDFName()))
-  })
-  
-  getDFInfo <- reactive({
-    getdfinfo(input$dataset)
+    eval(parse(text=input$dataset))
   })
   
   observe({
