@@ -9,6 +9,7 @@ source("R/dkutils.r")
 # shiny:::runApp("../shiny-explorer", aunch.browser = rstudio::viewer)
 
 data(iris)
+data(airquality)
 
 # for testing logistic regression
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
@@ -37,16 +38,16 @@ shinyUI(pageWithSidebar(
     div(class="accordion", id ="fieldsAccordion", 
         div(class="accordion-group", 
             buildAccordion("Numerics", 
-                           selectizeInput("numerics", "", choices=getdfinfo(getDataFrames()[1])$numerics$name, selected="", multiple=T,
+                           selectizeInput("numerics", "", choices=c(), selected="", multiple=T, #NB: choices is filled by observing input$dataset
                                        options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
             buildAccordion("Factors",  
-                           selectizeInput("factors", "", choices=getdfinfo(getDataFrames()[1])$factors$name, selected="", multiple=T,
+                           selectizeInput("factors", "", choices=c(), selected="", multiple=T,
                                        options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
             buildAccordion("Dates",    
-                           selectizeInput("dates", "", choices=getdfinfo(getDataFrames()[1])$dates$name, selected="", multiple=T, 
+                           selectizeInput("dates", "", choices=c(), selected="", multiple=T, 
                                        options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
             buildAccordion("Logicals", 
-                           selectizeInput("logicals", "", choices=getdfinfo(getDataFrames()[1])$logicals$name, selected="", multiple=T,
+                           selectizeInput("logicals", "", choices=c(), selected="", multiple=T,
                                        options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))))
         )
     ),
