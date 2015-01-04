@@ -14,23 +14,10 @@ shinyServer(function(input, output, session) {
   observe({
     dfinfo = getdfinfo(input$dataset)
     
-    # TODO: something wrong with updateSelectize server=T - file bug
-    
     # Update the field selects
-    updateSelectizeInput(session, "numerics", choices=getNumerics(input$dataset), server=F,
-                         options=list(
-                           placeholder="Select numeric(s)",
-                           dropdownParent = "body",
-                           plugins=list(remove_button="", drag_drop="")
-#                            render = I(sprintf(
-#                             "{
-#                                option: function(item, escape) {
-#                                 return '<div>' + escape(item.name) '</div>';
-#                              }
-#                             }"))
-                         ))
-    updateSelectInput(session, "factors", choices=dfinfo$factors$name)
-    updateSelectInput(session, "dates", choices=dfinfo$dates$name)
+    updateSelectInput(session, "numerics", choices=getNumerics(input$dataset))
+    updateSelectInput(session, "factors", choices=getFactors(input$dataset))
+    updateSelectInput(session, "dates", choices=getDates(input$dataset))
     updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
     
     # Populate the summary tab
@@ -38,7 +25,7 @@ shinyServer(function(input, output, session) {
       output$numericInfo = renderText({"There are no numeric fields"})
     else
       output$numericInfo = renderTable(as.data.frame(dfinfo$numerics)[,-1])
-    
+
     if (length(dfinfo$factors$name)==0)
       output$factorInfo = renderText({"There are no factor fields"})
     else
@@ -66,9 +53,9 @@ shinyServer(function(input, output, session) {
     if (input$deleteSelections != 0) {
       # clear the selected fields
       dfinfo = getdfinfo(input$dataset)
-      updateSelectInput(session, "numerics", choices=dfinfo$numerics$name)
-      updateSelectInput(session, "factors", choices=dfinfo$factors$name)
-      updateSelectInput(session, "dates", choices=dfinfo$dates$name)
+      updateSelectInput(session, "numerics", choices=getNumerics(input$dataset))
+      updateSelectInput(session, "factors", choices=getFactors(input$dataset))
+      updateSelectInput(session, "dates", choices=getDates(input$dataset))
       updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
     }
   })
@@ -86,10 +73,11 @@ shinyServer(function(input, output, session) {
       # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
       # instead wait until go button pressed
       rmdsub = "Error: There is no report template for this combination of selected fields."
-      numerics = input$numerics 
-      factors = input$factors
+      numerics = as.vector(sapply(input$numerics, function(x) { strsplit(x, "/")[[1]][1] })) # ugly hack to strip field info from selectizeInput
+      factors = as.vector(sapply(input$factors, function(x) { strsplit(x, "/")[[1]][1] })) 
+      dates = as.vector(sapply(input$dates, function(x) { strsplit(x, "/")[[1]][1] })) 
       logicals = input$logicals
-      dates = input$dates
+
       dfstr = input$dataset
     })
     

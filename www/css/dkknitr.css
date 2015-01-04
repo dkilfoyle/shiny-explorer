@@ -50,6 +50,14 @@
   background-color: rgb(230,230,230);
 }
 
+.selectize-name {
+  display: block;
+}
+
+.selectize-caption {
+  display: block;
+  opacity: 0.5;
+}
 
    pre .operator,
    pre .paren {

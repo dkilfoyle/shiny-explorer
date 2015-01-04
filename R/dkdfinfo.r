@@ -43,9 +43,26 @@ getNumerics = function(dfn) {
   fields = names(mydf)
   fields.type = sapply(fields, getVectorType, mydf)
   fields.numeric = fields[fields.type %in% c("numeric","integer","double", "logical")]
-  fields.summary = sapply(fields.numeric, function(x) { mean(mydf[,x], na.rm=T) })
-  return(fields.numeric) # for now until updateselectize server=T is fixed
-  return(data.frame(name=fields.numeric, mpg=fields.summary))
+  
+  cbind(label=sapply(fields.numeric, function(x) { sprintf("%s/mean=%.2f min=%.0f max=%.0f NAs=%.0f", x, mean(mydf[,x],na.rm=T), min(mydf[,x],na.rm=T), max(mydf[,x],na.rm=T), sum(is.na(mydf[,x]))) }))
+}
+
+getFactors = function(dfn) {
+  mydf = get(dfn)
+  fields = names(mydf)
+  fields.type = sapply(fields, getVectorType, mydf)
+  fields.factor = fields[fields.type %in% c("factor", "binaryfactor")]
+  
+  cbind(label=sapply(fields.factor, function(x) { sprintf("%s/nlevels=%.0f NAs=%.0f", x, nlevels(mydf[,x]), sum(is.na(mydf[,x]))) }))
+}
+
+getDates = function(dfn) {
+  mydf = get(dfn)
+  fields = names(mydf)
+  fields.type = sapply(fields, getVectorType, mydf)
+  fields.date = fields[fields.type %in% c("date")]
+  
+  cbind(label=sapply(fields.date, function(x) { sprintf("%s/min=%s max=%s NAs=%.0f", x, min(mydf[,x], na.rm=T), max(mydf[,x], na.rm=T), sum(is.na(mydf[,x]))) }))
 }
 
 getVectorType = function(field, mydf)

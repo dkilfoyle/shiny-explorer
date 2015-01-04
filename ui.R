@@ -11,6 +11,18 @@ source("R/dkutils.r")
 data(iris)
 data(airquality)
 
+# a very ugly hack as can't send more data than character vectors to selectizeInput therefore need to encode the field info in the label and extract it
+# NB: also need to strip the field info when
+selectizeRenderStr = "
+  {
+    item:function(item,escape) {
+      return '<div><span class=\"selectize-numitem\">' + escape((item.value).split('/')[0]) + '</span></div>'; 
+    },
+    option:function(item,escape) {
+      return '<div><span class=\"selectize-name\">' + escape((item.label).split('/')[0]) + '</span><span class=\"selectize-caption\">' + escape((item.label).split('/')[1]) + '</span></div>'; 
+    }
+  }"
+
 # for testing logistic regression
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
@@ -39,16 +51,19 @@ shinyUI(pageWithSidebar(
         div(class="accordion-group", 
             buildAccordion("Numerics", 
                            selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
-                                       options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))), expanded=T),
+                                          options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
+                                                       labelField="label", render = I(selectizeRenderStr))), expanded=T),
             buildAccordion("Factors",  
                            selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
-                                       options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
+                                       options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                                                    labelField="label", render = I(selectizeRenderStr)))),
             buildAccordion("Dates",    
                            selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
-                                       options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="")))),
+                                       options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                                                    labelField="label", render = I(selectizeRenderStr)))),
             buildAccordion("Logicals", 
                            selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
-                                       options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""))))
+                                       options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
         )
     ),
   
