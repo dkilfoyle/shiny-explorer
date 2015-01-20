@@ -28,3 +28,19 @@ dkReplace = function(mysource, myreplaces) {
   }
   return(mysource)
 }
+
+# enableControl <- function(id,session) {
+#   session$sendCustomMessage(type="jsCode",
+#                             list(code= paste("$('#",id,"').prop('disabled',false)",sep="")))
+# }
+
+jsCodeHandler = function() {
+  tags$head(tags$script(HTML('
+        Shiny.addCustomMessageHandler("jsCode",
+          function(message) {
+            console.log(message)
+            eval(message.code);
+          }
+        );
+      ')))
+}

@@ -35,6 +35,8 @@ shinyUI(pageWithSidebar(
   sidebarPanel(
     
     includeCSS("www/css/dkknitr.css"),
+    includeScript("www/js/jquery.sparkline.min.js"),
+    jsCodeHandler(), # for sending custom JS code to execute
     
     h2("Shiny Explorer"),
     
