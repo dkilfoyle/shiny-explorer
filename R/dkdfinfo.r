@@ -49,7 +49,7 @@ getNumerics = function(dfn) {
   fields.type = sapply(fields, getVectorType, mydf)
   fields.numeric = fields[fields.type %in% c("numeric","integer","double", "logical")]
   
-  cbind(label=sapply(fields.numeric, function(x) { sprintf("%s/mean=%.2f min=%.0f max=%.0f NAs=%.0f", x, mean(mydf[,x],na.rm=T), min(mydf[,x],na.rm=T), max(mydf[,x],na.rm=T), sum(is.na(mydf[,x]))) }))
+  cbind(label=sapply(fields.numeric, function(x) { sprintf("%s/Range: %.0f-%.0f | NAs: %.0f", x, min(mydf[,x],na.rm=T), max(mydf[,x],na.rm=T), sum(is.na(mydf[,x]))) }))
 }
 
 getFactors = function(dfn) {
