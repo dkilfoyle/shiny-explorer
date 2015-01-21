@@ -3,6 +3,7 @@ library(datasets)
 require(knitr)
 require(brew)
 #library(rCharts)
+library(tabplot) #install_github("tabplot", username="mtennekes", subdir="pkg")
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
@@ -77,6 +78,7 @@ shinyServer(function(input, output, session) {
     isolate({
       # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
       # instead wait until go button pressed
+      #TODO refactor the get selected vars code - need to fix selectizeInput captioning
       rmdsub = "Error: There is no report template for this combination of selected fields."
       numerics = as.vector(sapply(input$numerics, function(x) { strsplit(x, "/")[[1]][1] })) # ugly hack to strip field info from selectizeInput
       factors = as.vector(sapply(input$factors, function(x) { strsplit(x, "/")[[1]][1] })) 
@@ -176,4 +178,19 @@ shinyServer(function(input, output, session) {
   
   output$mydt = renderDataTable({getSelectedDF()}, options=list(lengthMenu = c(5, 10, 25), pageLength = 10))
   
+  output$mytabplot = renderPlot({
+    if (input$limittabplot) {
+      #TODO refactor the get selected vars code - need to fix selectizeInput captioning
+      numerics = as.vector(sapply(input$numerics, function(x) { strsplit(x, "/")[[1]][1] })) # ugly hack to strip field info from selectizeInput
+      factors = as.vector(sapply(input$factors, function(x) { strsplit(x, "/")[[1]][1] })) 
+      dates = as.vector(sapply(input$dates, function(x) { strsplit(x, "/")[[1]][1] })) 
+      logicals = input$logicals
+      vars = unlist(c(numerics, factors, dates, logicals))
+      if (length(vars) > 0)
+        tableplot(getSelectedDF()[, unlist(c(numerics, factors, dates, logicals))])
+    }
+    else
+      tableplot(getSelectedDF())
+  })
+
 })

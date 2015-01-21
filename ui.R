@@ -84,6 +84,9 @@ shinyUI(pageWithSidebar(
 
     tabsetPanel(id="mainPanelTabset",
       tabPanel("Summary", 
+               
+         tabsetPanel(id="summaryTabset",
+           tabPanel("Variables",               
               h4("Numerics"),
               tableOutput("numericInfo"),
               h4("Factors"),
@@ -92,7 +95,13 @@ shinyUI(pageWithSidebar(
               tableOutput("dateInfo"),
               h4("Logicals"),
               tableOutput("logicalInfo")
-              ## consider using tableplot from tabplot here,
+              # ,plotOutput("tabplot")
+           ),
+           tabPanel("TabPlot",
+            checkboxInput("limittabplot", label="Show selected variables only"),
+            plotOutput("mytabplot")
+           )
+         )
       ),
       tabPanel("Table", 
                dataTableOutput("mydt")
