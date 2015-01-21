@@ -174,6 +174,6 @@ shinyServer(function(input, output, session) {
     
   })
   
-  output$mydt = renderDataTable({getSelectedDF()}, options=list(lengthMenu = c(5, 10, 25), pageLength = 5))
+  output$mydt = renderDataTable({getSelectedDF()}, options=list(lengthMenu = c(5, 10, 25), pageLength = 10))
   
 })
