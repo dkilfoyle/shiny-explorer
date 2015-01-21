@@ -49,24 +49,22 @@ shinyUI(pageWithSidebar(
     # jqueryui needed for selectize plugins
     tagList(singleton(tags$head(tags$script(src="js/jquery-ui-1.10.3.custom.min.js")))),
     
-    div(class="accordion", id ="fieldsAccordion", 
-        div(class="accordion-group", 
-            buildAccordion("Numerics", 
+    div(class="panel-group", id ="fieldsAccordion", role="tablist",
+            buildAccordion("Numerics", dataparent="", 
                            selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
                                           options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
                                                        labelField="label", render = I(selectizeRenderStr))), expanded=T),
-            buildAccordion("Factors",  
+            buildAccordion("Factors", dataparent="", 
                            selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
                                        options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
                                                     labelField="label", render = I(selectizeRenderStr)))),
-            buildAccordion("Dates",    
+            buildAccordion("Dates", dataparent="",  
                            selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
                                        options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
                                                     labelField="label", render = I(selectizeRenderStr)))),
-            buildAccordion("Logicals", 
+            buildAccordion("Logicals", dataparent="", 
                            selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
                                        options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
-        )
     ),
   
     p(
