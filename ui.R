@@ -91,10 +91,11 @@ shinyUI(pageWithSidebar(
               h4("Dates"),
               tableOutput("dateInfo"),
               h4("Logicals"),
-              tableOutput("logicalInfo"),
+              tableOutput("logicalInfo")
               ## consider using tableplot from tabplot here,
-              div(HTML("<hr>")),
-              dataTableOutput("mydt")
+      ),
+      tabPanel("Table", 
+               dataTableOutput("mydt")
       ),
       tabPanel("Analysis", 
                htmlOutput("analysis")
