@@ -55,9 +55,8 @@
 .panel-default>.panel-heading {
   background-color: rgb(230,230,230);
 }
-
-.accordion-toggle {
-  background-color: rgb(230,230,230);
+.nav {
+  margin-bottom: 10px;
 }
 
 .selectize-name {
