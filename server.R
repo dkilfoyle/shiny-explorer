@@ -48,22 +48,18 @@ shinyServer(function(input, output, session) {
     
   })
   
-  observe({
-    if (input$go != 0) {
-      # show the Analysis tab panel
-      updateTabsetPanel(session, "mainPanelTabset", selected="Analysis") 
-    }
+  observeEvent(input$go, function() {
+    # show the Analysis tab panel
+    updateTabsetPanel(session, "mainPanelTabset", selected="Analysis") 
   })
   
-  observe({
-    if (input$deleteSelections != 0) {
-      # clear the selected fields
-      dfinfo = getdfinfo(input$dataset)
-      updateSelectInput(session, "numerics", choices=getNumerics(input$dataset))
-      updateSelectInput(session, "factors", choices=getFactors(input$dataset))
-      updateSelectInput(session, "dates", choices=getDates(input$dataset))
-      updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
-    }
+  observeEvent(input$deleteSelections, function() {
+    # clear the selected fields
+    dfinfo = getdfinfo(input$dataset)
+    updateSelectInput(session, "numerics", choices=getNumerics(input$dataset))
+    updateSelectInput(session, "factors", choices=getFactors(input$dataset))
+    updateSelectInput(session, "dates", choices=getDates(input$dataset))
+    updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
   })
   
   output$analysis = renderText({
