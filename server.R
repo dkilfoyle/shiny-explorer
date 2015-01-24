@@ -12,6 +12,7 @@ shinyServer(function(input, output, session) {
     eval(parse(text=input$dataset))
   })
   
+  # when dataset changed populate the summaries and variable selection dropdowns
   observe({
     dfinfo = getdfinfo(input$dataset)
     
@@ -48,11 +49,6 @@ shinyServer(function(input, output, session) {
     
   })
   
-  observeEvent(input$go, function() {
-    # show the Analysis tab panel
-    updateTabsetPanel(session, "mainPanelTabset", selected="Analysis") 
-  })
-  
   observeEvent(input$deleteSelections, function() {
     # clear the selected fields
     dfinfo = getdfinfo(input$dataset)
@@ -62,27 +58,28 @@ shinyServer(function(input, output, session) {
     updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
   })
   
-  output$analysis = renderText({
+  observeEvent(input$go, function() {
+    # show the Analysis tab panel 
+    updateTabsetPanel(session, "mainPanelTabset", selected="Analysis")  
+  })
+  
+  getAnalysis = eventReactive(input$go, function() {
     
-    if (input$go == 0)
-      return("Select some fields first")
+    # Load the selected variables and dataframe
+    #TODO refactor the get selected vars code - need to fix selectizeInput captioning
+    rmdsub = "Error: There is no report template for this combination of selected fields."
+    numerics = as.vector(sapply(input$numerics, function(x) { strsplit(x, "/")[[1]][1] })) # ugly hack to strip field info from selectizeInput
+    factors = as.vector(sapply(input$factors, function(x) { strsplit(x, "/")[[1]][1] })) 
+    dates = as.vector(sapply(input$dates, function(x) { strsplit(x, "/")[[1]][1] })) 
+    logicals = input$logicals
+    dfstr = input$dataset
+    
+    if ((length(numerics) + length(factors) + length(dates) + length(logicals)) == 0)
+      output$analysis = return("Select some fields first")
     
     progress = shiny::Progress$new(session, min=1, max=3)
     on.exit(progress$close())
     progress$set(message="Building report")
-    
-    isolate({
-      # wrap in isolate so that changing the selectboxes doesn't immediately trigger a renderText
-      # instead wait until go button pressed
-      #TODO refactor the get selected vars code - need to fix selectizeInput captioning
-      rmdsub = "Error: There is no report template for this combination of selected fields."
-      numerics = as.vector(sapply(input$numerics, function(x) { strsplit(x, "/")[[1]][1] })) # ugly hack to strip field info from selectizeInput
-      factors = as.vector(sapply(input$factors, function(x) { strsplit(x, "/")[[1]][1] })) 
-      dates = as.vector(sapply(input$dates, function(x) { strsplit(x, "/")[[1]][1] })) 
-      logicals = input$logicals
-
-      dfstr = input$dataset
-    })
     
     # could simplify following by using knit_expand and {{mydf}}${{numeric1}} etc in templates
     # but this makes the templates hard to read and write
@@ -167,9 +164,17 @@ shinyServer(function(input, output, session) {
     
 
     progress$inc()
-    
+
+    session$onFlushed(function() {
+      updateTabsetPanel(session, "mainPanelTabset", selected="Analysis") 
+    })
+
     return(myhtml)
     
+  })
+
+  output$analysis = renderText({
+    getAnalysis()
   })
   
   output$mydt = renderDataTable({getSelectedDF()}, options=list(lengthMenu = c(5, 10, 25), pageLength = 10))
