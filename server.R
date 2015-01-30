@@ -49,7 +49,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  observeEvent(input$deleteSelections, function() {
+  observeEvent(input$deleteSelections, {
     # clear the selected fields
     dfinfo = getdfinfo(input$dataset)
     updateSelectInput(session, "numerics", choices=getNumerics(input$dataset))
@@ -58,12 +58,12 @@ shinyServer(function(input, output, session) {
     updateSelectInput(session, "logicals", choices=dfinfo$logicals$name)
   })
   
-  observeEvent(input$go, function() {
+  observeEvent(input$go, {
     # show the Analysis tab panel 
     updateTabsetPanel(session, "mainPanelTabset", selected="Analysis")  
   })
   
-  getAnalysis = eventReactive(input$go, function() {
+  getAnalysis = eventReactive(input$go, {
     
     # Load the selected variables and dataframe
     #TODO refactor the get selected vars code - need to fix selectizeInput captioning
