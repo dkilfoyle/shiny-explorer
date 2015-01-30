@@ -27,10 +27,12 @@ selectizeRenderStr = "
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
 # Define UI for dataset viewer application
-shinyUI(fluidPage(
+shinyUI(navbarPage("Shiny-Explorer",
   
   # Application title.
-  titlePanel(""),
+#   titlePanel(""),
+
+  tabPanel("Explorer",
   
   sidebarLayout(
     
@@ -39,7 +41,7 @@ shinyUI(fluidPage(
       includeScript("www/js/jquery.sparkline.min.js"),
       jsCodeHandler(), # for sending custom JS code to execute
       
-      h2("Shiny Explorer"),
+      h3("Variable Selection"),
       
       wellPanel(
         selectInput("dataset", "Dataframe:", choices = getDataFrames()),
@@ -113,4 +115,10 @@ shinyUI(fluidPage(
       )
     ) # mainPanel
   ) # sidebarLayout
+  ), # tabPanel(Explorer)
+  navbarMenu("Tests",
+     tabPanel("2 Sample"),
+     tabPanel("Correlation")
+  ) # navbarMenu(Tests)
+  
 ))
