@@ -15,20 +15,30 @@ buildAccordionBootstrap2 = function(name, item, expanded=F) {
   )
 }
 
-buildAccordion = function(name, item, dataparent, expanded=F) {
+
+accordion = function(name, ...) {
+  div(class="panel-group", id = name, role="tablist", ...)
+}
+
+accordionPanel = function(title, item, dataparent, expanded=F) {
   inclass = ifelse(expanded, "in", "")
-  dataparent = ifelse(missing(dataparent), "", paste0('data-parent="#', dataparent))
+  mydataparent = ifelse(missing(dataparent), "", paste0('data-parent="#', dataparent, '"'))
+  myitemid = paste0("collapse", make.names(title))
+
   div(class="panel panel-default", 
       div(class="panel-heading", role="tab",
           h4(class="panel-title", 
-             HTML(paste('<a class="accordion-toggle" data-toggle="collapse" ', dataparent, ' href="#collapse',name,'">',name,'</a>', sep=""))
+             #a(datatoggle="collapse", dataparent=mydataparent, href=paste0("#", myitemid), title)
+             HTML(paste('<a data-toggle="collapse" ', mydataparent, ' href="#', myitemid, '">', title,'</a>', sep=""))
           )
-      ),
-      div(id=paste("collapse",name,sep=""), class=paste("panel-collapse collapse", inclass),
+      ), # panel-heading
+      div(id=myitemid, class=paste("panel-collapse collapse", inclass), role="tabpanel",
           div(class="panel-body", item)
-      )
+      ) # panel-collapse
   )
 }
+
+
 
 dkpval = function(myp) {
   if (myp < 0.001) return("p < 0.001")
