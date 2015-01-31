@@ -29,17 +29,17 @@ selectizeRenderStr = "
 # Define UI for dataset viewer application
 shinyUI(navbarPage("Shiny-Explorer", 
   
-  # Application title.
-#   titlePanel(""),
-
   tabPanel("Explorer", icon=icon("list"),
   
   sidebarLayout(
-    
     sidebarPanel(
+      
+      # header includes
       includeCSS("www/css/dkknitr.css"),
       includeScript("www/js/jquery-ui-1.10.3.custom.min.js"),
       includeScript("www/js/jquery.sparkline.min.js"),
+      includeScript("www/js/highlight.pack.js"),
+      includeScript("www/js/toc.js"),
       jsCodeHandler(), # for sending custom JS code to execute
       
       h3("Variable Selection"),
@@ -78,8 +78,6 @@ shinyUI(navbarPage("Shiny-Explorer",
 
     mainPanel(
       
-      includeHTML("www/js/tools.js"),
-  
       tabsetPanel(id="mainPanelTabset",
         tabPanel("Summary", 
                  
