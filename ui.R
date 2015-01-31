@@ -27,12 +27,12 @@ selectizeRenderStr = "
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
 # Define UI for dataset viewer application
-shinyUI(navbarPage("Shiny-Explorer",
+shinyUI(navbarPage("Shiny-Explorer", 
   
   # Application title.
 #   titlePanel(""),
 
-  tabPanel("Explorer",
+  tabPanel("Explorer", icon=icon("list"),
   
   sidebarLayout(
     
@@ -72,8 +72,8 @@ shinyUI(navbarPage("Shiny-Explorer",
     
       p(
         # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
-        actionButton("go",strong("Analyse")), 
-        actionButton("deleteSelections", "Clear Selections")
+        actionButton("go",strong("Analyse"), icon("play")), 
+        actionButton("deleteSelections", "Clear Selections", icon("trash-o"))
       )
       
   
@@ -116,7 +116,8 @@ shinyUI(navbarPage("Shiny-Explorer",
     ) # mainPanel
   ) # sidebarLayout
   ), # tabPanel(Explorer)
-  navbarMenu("Tests",
+
+  navbarMenu("Tests", icon=icon("bar-chart"),
      tabPanel("2 Sample"),
      tabPanel("Correlation")
   ) # navbarMenu(Tests)
