@@ -15,12 +15,13 @@ buildAccordionBootstrap2 = function(name, item, expanded=F) {
   )
 }
 
-buildAccordion = function(name, dataparent, item, expanded=F) {
+buildAccordion = function(name, item, dataparent, expanded=F) {
   inclass = ifelse(expanded, "in", "")
+  dataparent = ifelse(missing(dataparent), "", paste0('data-parent="#', dataparent))
   div(class="panel panel-default", 
       div(class="panel-heading", role="tab",
           h4(class="panel-title", 
-             HTML(paste('<a class="accordion-toggle" data-toggle="collapse" data-parent="#', dataparent, '" href="#collapse',name,'">',name,'</a>', sep=""))
+             HTML(paste('<a class="accordion-toggle" data-toggle="collapse" ', dataparent, ' href="#collapse',name,'">',name,'</a>', sep=""))
           )
       ),
       div(id=paste("collapse",name,sep=""), class=paste("panel-collapse collapse", inclass),
