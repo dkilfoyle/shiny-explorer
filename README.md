@@ -7,6 +7,15 @@ Shiny (www.rstudio.com/shiny) based data explorer with report templates based on
 
 ## Instructions
 
+From github:
+
+```
+library(shiny)
+runGitHub("shiny-explorer","dkilfoyle")
+```
+
+From downloaded source:
+
 ```
 shiny:::runApp("../shiny-explorer")
 ```
@@ -20,6 +29,6 @@ All templates undergo (in order):
 
 ## Dependencies
 
-shiny >= 0.11 (bootstrap3)
-shinyAce
-tabplot
+* shiny >= 0.11 (bootstrap3)
+* shinyAce
+* tabplot
