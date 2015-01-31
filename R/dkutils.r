@@ -29,7 +29,7 @@ accordionPanel = function(title, item, dataparent, expanded=F) {
       div(class="panel-heading", role="tab",
           h4(class="panel-title", 
              #a(datatoggle="collapse", dataparent=mydataparent, href=paste0("#", myitemid), title)
-             HTML(paste('<a data-toggle="collapse" ', mydataparent, ' href="#', myitemid, '">', title,'</a>', sep=""))
+             HTML(paste('<a class="collapsed" data-toggle="collapse" ', mydataparent, ' href="#', myitemid, '">', title,'</a>', sep=""))
           )
       ), # panel-heading
       div(id=myitemid, class=paste("panel-collapse collapse", inclass), role="tabpanel",

@@ -64,7 +64,7 @@
     float: right;        /* adjust as needed */
     color: grey;         /* adjust as needed */
 }
-.panel-heading a.in:after {
+.panel-heading a.collapsed:after {
     /* symbol for "collapsed" panels */
         content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 
