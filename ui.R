@@ -6,7 +6,7 @@ source("R/dkutils.r")
 
 # to run
 # shiny:::runApp("../shiny-explorer")
-# shiny:::runApp("../shiny-explorer", aunch.browser = rstudio::viewer)
+# shiny:::runApp("../shiny-explorer", launch.browser = rstudio::viewer)
 
 data(iris)
 data(airquality)
@@ -73,9 +73,8 @@ shinyUI(navbarPage("Shiny-Explorer",
         actionButton("go",strong("Analyse"), icon("play")), 
         actionButton("deleteSelections", "Clear Selections", icon("trash-o"))
       )
-      
-  
-    ),
+    
+    ), # sidebarPanel
 
     mainPanel(
       
@@ -84,6 +83,7 @@ shinyUI(navbarPage("Shiny-Explorer",
       tabsetPanel(id="mainPanelTabset",
         tabPanel("Summary", 
                  
+           # TODO: ? can do dropdown tabpanels instead of nested
            tabsetPanel(id="summaryTabset",
              tabPanel("Variables",               
                 h4("Numerics"),
@@ -112,6 +112,7 @@ shinyUI(navbarPage("Shiny-Explorer",
                  aceEditor("acermd", mode="markdown"))
       )
     ) # mainPanel
+  
   ) # sidebarLayout
   ), # tabPanel(Explorer)
 
