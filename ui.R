@@ -30,57 +30,57 @@ selectizeRenderStr = "
 shinyUI(navbarPage("Shiny-Explorer", 
   
   tabPanel("Explorer", icon=icon("list"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      
-      # header includes
-      includeCSS("www/css/dkknitr.css"),
-      includeScript("www/js/jquery-ui-1.10.3.custom.min.js"),
-      includeScript("www/js/jquery.sparkline.min.js"),
-      includeScript("www/js/highlight.pack.js"),
-      includeScript("www/js/toc.js"),
-      jsCodeHandler(), # for sending custom JS code to execute
-      
-      h3("Variable Selection"),
-      
-      wellPanel(
-        selectInput("dataset", "Dataframe:", choices = getDataFrames()),
-        p(helpText("Choose the desired fields in the dropdowns",
-                   "and click Analyse to show an analysis."))
-      ),
-      
-      accordion("fieldsAccordion", 
-        accordionPanel("Numerics", 
-           selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
-                          options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
-                                       labelField="label", render = I(selectizeRenderStr))), expanded=T),
-        accordionPanel("Factors", 
-           selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
-                          options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
-                                       labelField="label", render = I(selectizeRenderStr)))),
-        accordionPanel("Dates", 
-           selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
-                                   options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
-                                                labelField="label", render = I(selectizeRenderStr)))),
-        accordionPanel("Logicals", 
-           selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
-                     options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
-      ),
     
-      p(
-        # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
-        actionButton("go",strong("Analyse"), icon("play")), 
-        actionButton("deleteSelections", "Clear Selections", icon("trash-o"))
-      )
-    
-    ), # sidebarPanel
-
-    mainPanel(
+    sidebarLayout(
+      sidebarPanel(
+        
+        # header includes
+        includeCSS("www/css/dkknitr.css"),
+        includeScript("www/js/jquery-ui-1.10.3.custom.min.js"),
+        includeScript("www/js/jquery.sparkline.min.js"),
+        includeScript("www/js/highlight.pack.js"),
+        includeScript("www/js/toc.js"),
+        jsCodeHandler(), # for sending custom JS code to execute
+        
+        h3("Variable Selection"),
+        
+        wellPanel(
+          selectInput("dataset", "Dataframe:", choices = getDataFrames()),
+          p(helpText("Choose the desired fields in the dropdowns",
+            "and click Analyse to show an analysis."))
+        ),
+        
+        accordion("fieldsAccordion", 
+          accordionPanel("Numerics", 
+            selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
+              options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
+                labelField="label", render = I(selectizeRenderStr))), expanded=T),
+          accordionPanel("Factors", 
+            selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
+              options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                labelField="label", render = I(selectizeRenderStr)))),
+          accordionPanel("Dates", 
+            selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
+              options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                labelField="label", render = I(selectizeRenderStr)))),
+          accordionPanel("Logicals", 
+            selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
+              options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
+        ),
+        
+        p(
+          # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
+          actionButton("go",strong("Analyse"), icon("play")), 
+          actionButton("deleteSelections", "Clear Selections", icon("trash-o"))
+        )
+        
+      ), # sidebarPanel
       
-      tabsetPanel(id="mainPanelTabset",
-
-        tabPanel("Variables",  #tabsetPanel(id="summaryTabset",
+      mainPanel(
+        
+        tabsetPanel(id="mainPanelTabset",
+          
+          tabPanel("Variables",  #tabsetPanel(id="summaryTabset",
             h4("Numerics"),
             tableOutput("numericInfo"),
             h4("Factors"),
@@ -91,29 +91,29 @@ shinyUI(navbarPage("Shiny-Explorer",
             tableOutput("logicalInfo")
             # ,plotOutput("tabplot")
           ),
-        
-        navbarMenu("Data",
-          tabPanel("TabPlot",
-            checkboxInput("limittabplot", label="Show selected variables only"),
-            plotOutput("mytabplot")
+          
+          navbarMenu("Data",
+            tabPanel("TabPlot",
+              checkboxInput("limittabplot", label="Show selected variables only"),
+              plotOutput("mytabplot")
+            ),
+            tabPanel("Table", 
+              dataTableOutput("mydt")
+            )),
+          tabPanel("Analysis", 
+            htmlOutput("analysis")
           ),
-        tabPanel("Table", 
-                 dataTableOutput("mydt")
-        )),
-        tabPanel("Analysis", 
-                 htmlOutput("analysis")
-        ),
-        tabPanel("Source",
-                 aceEditor("acermd", mode="markdown"))
-      )
-    ) # mainPanel
-  
-  ) # sidebarLayout
+          tabPanel("Source",
+            aceEditor("acermd", mode="markdown"))
+        )
+      ) # mainPanel
+      
+    ) # sidebarLayout
   ), # tabPanel(Explorer)
-
+  
   navbarMenu("Tests", icon=icon("bar-chart"),
-     tabPanel("2 Sample"),
-     tabPanel("Correlation")
+    tabPanel("2 Sample"),
+    tabPanel("Correlation")
   ) # navbarMenu(Tests)
   
 ))

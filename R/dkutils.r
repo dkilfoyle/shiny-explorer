@@ -7,10 +7,10 @@ buildAccordionBootstrap2 = function(name, item, expanded=F) {
   inclass = ifelse(expanded, "in", "")
   div(
     div(class="accordion-heading", 
-        HTML(paste('<a class="accordion-toggle" data-toggle="collapse" href="#collapse',name,'">',name,'</a>', sep=""))
+      HTML(paste('<a class="accordion-toggle" data-toggle="collapse" href="#collapse',name,'">',name,'</a>', sep=""))
     ),
     div(id=paste("collapse",name,sep=""), class=paste("accordion-body collapse", inclass),
-        div(class="accordion-inner", item)
+      div(class="accordion-inner", item)
     )
   )
 }
@@ -24,17 +24,17 @@ accordionPanel = function(title, item, dataparent, expanded=F) {
   inclass = ifelse(expanded, "in", "")
   mydataparent = ifelse(missing(dataparent), "", paste0('data-parent="#', dataparent, '"'))
   myitemid = paste0("collapse", make.names(title))
-
+  
   div(class="panel panel-default", 
-      div(class="panel-heading", role="tab",
-          h4(class="panel-title", 
-             #a(datatoggle="collapse", dataparent=mydataparent, href=paste0("#", myitemid), title)
-             HTML(paste('<a class="collapsed" data-toggle="collapse" ', mydataparent, ' href="#', myitemid, '">', title,'</a>', sep=""))
-          )
-      ), # panel-heading
-      div(id=myitemid, class=paste("panel-collapse collapse", inclass), role="tabpanel",
-          div(class="panel-body", item)
-      ) # panel-collapse
+    div(class="panel-heading", role="tab",
+      h4(class="panel-title", 
+        #a(datatoggle="collapse", dataparent=mydataparent, href=paste0("#", myitemid), title)
+        HTML(paste('<a class="collapsed" data-toggle="collapse" ', mydataparent, ' href="#', myitemid, '">', title,'</a>', sep=""))
+      )
+    ), # panel-heading
+    div(id = myitemid, class=paste("panel-collapse collapse", inclass), role="tabpanel",
+      div(class="panel-body", item)
+    ) # panel-collapse
   )
 }
 
