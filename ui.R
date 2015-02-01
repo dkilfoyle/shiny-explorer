@@ -79,30 +79,27 @@ shinyUI(navbarPage("Shiny-Explorer",
     mainPanel(
       
       tabsetPanel(id="mainPanelTabset",
-        tabPanel("Summary", 
-                 
-           # TODO: ? can do dropdown tabpanels instead of nested
-           tabsetPanel(id="summaryTabset",
-             tabPanel("Variables",               
-                h4("Numerics"),
-                tableOutput("numericInfo"),
-                h4("Factors"),
-                tableOutput("factorInfo"),
-                h4("Dates"),
-                tableOutput("dateInfo"),
-                h4("Logicals"),
-                tableOutput("logicalInfo")
-                # ,plotOutput("tabplot")
-             ),
-             tabPanel("TabPlot",
-              checkboxInput("limittabplot", label="Show selected variables only"),
-              plotOutput("mytabplot")
-             )
-           )
-        ),
+
+        tabPanel("Variables",  #tabsetPanel(id="summaryTabset",
+            h4("Numerics"),
+            tableOutput("numericInfo"),
+            h4("Factors"),
+            tableOutput("factorInfo"),
+            h4("Dates"),
+            tableOutput("dateInfo"),
+            h4("Logicals"),
+            tableOutput("logicalInfo")
+            # ,plotOutput("tabplot")
+          ),
+        
+        navbarMenu("Data",
+          tabPanel("TabPlot",
+            checkboxInput("limittabplot", label="Show selected variables only"),
+            plotOutput("mytabplot")
+          ),
         tabPanel("Table", 
                  dataTableOutput("mydt")
-        ),
+        )),
         tabPanel("Analysis", 
                  htmlOutput("analysis")
         ),

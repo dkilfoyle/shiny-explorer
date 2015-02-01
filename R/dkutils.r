@@ -38,8 +38,6 @@ accordionPanel = function(title, item, dataparent, expanded=F) {
   )
 }
 
-
-
 dkpval = function(myp) {
   if (myp < 0.001) return("p < 0.001")
   if (myp < 0.01) return("p < 0.01")
