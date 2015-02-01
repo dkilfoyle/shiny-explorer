@@ -27,7 +27,7 @@ selectizeRenderStr = "
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
 # Define UI for dataset viewer application
-shinyUI(navbarPage("Shiny-Explorer", 
+shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
   
   tabPanel("Explorer", icon=icon("list"),
     
@@ -40,7 +40,9 @@ shinyUI(navbarPage("Shiny-Explorer",
         includeScript("www/js/jquery.sparkline.min.js"),
         includeScript("www/js/highlight.pack.js"),
         includeScript("www/js/toc.js"),
+        
         jsCodeHandler(), # for sending custom JS code to execute
+        tags$style(type="text/css", "body {padding-top: 70px;}"), # stop fixed-top navbar from overlay body content
         
         h3("Variable Selection"),
         
