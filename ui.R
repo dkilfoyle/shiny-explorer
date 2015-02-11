@@ -36,6 +36,8 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
         
         # header includes
         includeCSS("www/css/dkknitr.css"),
+        includeCSS("www/css/hover.css"),
+        
         includeScript("www/js/jquery-ui-1.10.3.custom.min.js"),
         includeScript("www/js/jquery.sparkline.min.js"),
         includeScript("www/js/highlight.pack.js"),
@@ -76,8 +78,8 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
         
         p(
           # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
-          actionButton("go",strong("Analyse"), icon("play")), 
-          actionButton("deleteSelections", "Clear Selections", icon("trash-o"))
+          actionButton("go",strong("Analyse"), class="hvr-icon-spin"), #icon("play")), 
+          actionButton("deleteSelections", "Clear Selections", class="hvr-icon-sink-away") #icon("trash-o"))
         )
         
       ), # sidebarPanel
