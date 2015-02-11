@@ -148,6 +148,12 @@ shinyServer(function(input, output, session) {
 #     render("temp.rmd", html_fragment(toc=T))
 #     myhtml = paste(readLines("temp.html"), collapse="\n")
     
+    if (input$chkggtheme) {
+      theme_set(theme_classic())
+    }
+    else
+      theme_set(theme_gray())
+    
     render_html() # this sets hooks to use highr
     myhtml = paste(#paste(readLines("templates/navbar.rms"), collapse="\n"),
       try(knit2html(text = brewout, stylesheet="", fragment.only = TRUE)),

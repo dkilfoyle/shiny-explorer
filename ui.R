@@ -70,6 +70,10 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
               options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
         ),
         
+        accordion("optionsAccordion",
+          accordionPanel("Options",
+            checkboxInput("chkggtheme", "Classic ggplots theme"))),
+        
         p(
           # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
           actionButton("go",strong("Analyse"), icon("play")), 
