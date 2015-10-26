@@ -8,7 +8,7 @@ source("R/dkutils.r")
 
 # to run
 # shiny:::runApp("../shiny-explorer")
-# shiny:::runApp("../shiny-explorer", aunch.browser = rstudio::viewer)
+# shiny:::runApp("../shiny-explorer", launch.browser = rstudio::viewer)
 
 data(iris)
 data(airquality)
@@ -29,46 +29,104 @@ selectizeRenderStr = "
 #mydata <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
 
 # Define UI for dataset viewer application
-shinyUI(pageWithSidebar(
+shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
   
-  # Application title.
-  headerPanel(""),
+  tabPanel("Explorer", icon=icon("list"),
+    
+    sidebarLayout(
+      sidebarPanel(
+        
+        # header includes
+        includeCSS("www/css/dkknitr.css"),
+        includeCSS("www/css/hover.css"),
+        
+        includeScript("www/js/jquery-ui-1.10.3.custom.min.js"),
+        includeScript("www/js/jquery.sparkline.min.js"),
+        includeScript("www/js/highlight.pack.js"),
+        includeScript("www/js/toc.js"),
+        
+        jsCodeHandler(), # for sending custom JS code to execute
+        tags$style(type="text/css", "body {padding-top: 70px;}"), # stop fixed-top navbar from overlay body content
+        
+        h3("Variable Selection"),
+        
+        wellPanel(
+          selectInput("dataset", "Dataframe:", choices = getDataFrames()),
+          p(helpText("Choose the desired fields in the dropdowns",
+            "and click Analyse to show an analysis."))
+        ),
+        
+        accordion("fieldsAccordion", 
+          accordionPanel("Numerics", 
+            selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
+              options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
+                labelField="label", render = I(selectizeRenderStr))), expanded=T),
+          accordionPanel("Factors", 
+            selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
+              options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                labelField="label", render = I(selectizeRenderStr)))),
+          accordionPanel("Dates", 
+            selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
+              options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
+                labelField="label", render = I(selectizeRenderStr)))),
+          accordionPanel("Logicals", 
+            selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
+              options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
+        ),
+        
+        accordion("optionsAccordion",
+          accordionPanel("Options",
+            checkboxInput("chkggtheme", "Classic ggplots theme"))),
+        
+        p(
+          # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
+          actionButton("go",strong("Analyse"), class="hvr-icon-spin"), #icon("play")), 
+          actionButton("deleteSelections", "Clear Selections", class="hvr-icon-sink-away") #icon("trash-o"))
+        )
+        
+      ), # sidebarPanel
+      
+      mainPanel(
+        
+        tabsetPanel(id="mainPanelTabset",
+          
+          tabPanel("Variables",  #tabsetPanel(id="summaryTabset",
+            h4("Numerics"),
+            tableOutput("numericInfo"),
+            h4("Factors"),
+            tableOutput("factorInfo"),
+            h4("Dates"),
+            tableOutput("dateInfo"),
+            h4("Logicals"),
+            tableOutput("logicalInfo")
+            # ,plotOutput("tabplot")
+          ),
+          
+          navbarMenu("Data",
+            tabPanel("TabPlot",
+              checkboxInput("limittabplot", label="Show selected variables only"),
+              plotOutput("mytabplot")
+            ),
+            tabPanel("Table", 
+              dataTableOutput("mydt")
+            )),
+          tabPanel("Analysis", 
+            htmlOutput("analysis")
+          ),
+          tabPanel("Source",
+            aceEditor("acermd", mode="markdown"))
+        )
+      ) # mainPanel
+      
+    ) # sidebarLayout
+  ), # tabPanel(Explorer)
   
-  sidebarPanel(
-    
-    includeCSS("www/css/dkknitr.css"),
-    includeScript("www/js/jquery.sparkline.min.js"),
-    jsCodeHandler(), # for sending custom JS code to execute
-    
-    h2("Shiny Explorer"),
-    
-    wellPanel(
-      selectInput("dataset", "Dataframe:", choices = getDataFrames()),
-      p(helpText("Choose the desired fields in the dropdowns",
-                 "and click Analyse to show an analysis."))
-    ),
-    
-    # jqueryui needed for selectize plugins
-    tagList(singleton(tags$head(tags$script(src="js/jquery-ui-1.10.3.custom.min.js")))),
-    
-    div(class="panel-group", id ="fieldsAccordion", role="tablist",
-            buildAccordion("Numerics", dataparent="fieldsAccordion", 
-                           selectizeInput("numerics", label="", choices=NULL, selected="", multiple=T, #NB: choices is filled by observing input$dataset
-                                          options=list(placeholder="Select numeric(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""), 
-                                                       labelField="label", render = I(selectizeRenderStr))), expanded=T),
-            buildAccordion("Factors", dataparent="fieldsAccordion", 
-                           selectizeInput("factors", label="", choices=NULL, selected="", multiple=T,
-                                       options=list(placeholder="Select factor(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
-                                                    labelField="label", render = I(selectizeRenderStr)))),
-            buildAccordion("Dates", dataparent="fieldsAccordion",  
-                           selectizeInput("dates", label="", choices=NULL, selected="", multiple=T, 
-                                       options=list(placeholder="Select date(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop=""),
-                                                    labelField="label", render = I(selectizeRenderStr)))),
-            buildAccordion("Logicals", dataparent="fieldsAccordion", 
-                           selectizeInput("logicals", label="", choices=NULL, selected="", multiple=T,
-                                       options=list(placeholder="Select logical(s)", dropdownParent = "body", plugins=list(remove_button="", drag_drop="") )))
-    ),
+  navbarMenu("Tests", icon=icon("bar-chart"),
+    tabPanel("2 Sample"),
+    tabPanel("Correlation")
+  ) # navbarMenu(Tests)
   
+<<<<<<< HEAD
     p(
       # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
       actionButton("go",strong("Analyse")), 
@@ -116,4 +174,6 @@ shinyUI(pageWithSidebar(
                aceEditor("acermd", mode="markdown"))
     )
   )
+=======
+>>>>>>> f0f3898fa2db697dffef482290647e7e6152e4da
 ))
