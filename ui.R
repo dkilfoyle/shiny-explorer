@@ -1,7 +1,3 @@
-library(shiny)
-library(shinyAce)
-require(rpivotTable) #install_github(c("ramnathv/htmlwidgets", "smartinsightsfromdata/rpivotTable"))
-
 source("R/dkdfinfo.r")
 source("R/dkgraph.r")
 source("R/dkutils.r")
@@ -9,9 +5,6 @@ source("R/dkutils.r")
 # to run
 # shiny:::runApp("../shiny-explorer")
 # shiny:::runApp("../shiny-explorer", launch.browser = rstudio::viewer)
-
-data(iris)
-data(airquality)
 
 # a very ugly hack as can't send more data than character vectors to selectizeInput therefore need to encode the field info in the label and extract it
 # NB: also need to strip the field info when

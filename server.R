@@ -1,10 +1,7 @@
-library(shiny)
-library(datasets)
 require(knitr)
 require(brew)
-#library(rCharts)
 library(tabplot) #install_github("tabplot", username="mtennekes", subdir="pkg")
-require(rpivotTable) #install_github(c("ramnathv/htmlwidgets", "smartinsightsfromdata/rpivotTable"))
+library(ggplot2)
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
