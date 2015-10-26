@@ -109,7 +109,10 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
             ),
             tabPanel("Table", 
               dataTableOutput("mydt")
-            )),
+            ),
+            tabPanel("PivotTable",
+                     rpivotTableOutput("pivotTable"))
+          ),
           tabPanel("Analysis", 
             htmlOutput("analysis")
           ),
@@ -126,54 +129,4 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
     tabPanel("Correlation")
   ) # navbarMenu(Tests)
   
-<<<<<<< HEAD
-    p(
-      # use actionButton rather than submitButton so that changing the dataframe dropdown automatically updates the field selects
-      actionButton("go",strong("Analyse")), 
-      actionButton("deleteSelections", "Clear Selections")
-    )
-    
-
-  ),
-
-  mainPanel(
-    
-    includeHTML("www/js/tools.js"),
-
-    tabsetPanel(id="mainPanelTabset",
-      tabPanel("Summary", 
-               
-         tabsetPanel(id="summaryTabset",
-           tabPanel("Variables",               
-              h4("Numerics"),
-              tableOutput("numericInfo"),
-              h4("Factors"),
-              tableOutput("factorInfo"),
-              h4("Dates"),
-              tableOutput("dateInfo"),
-              h4("Logicals"),
-              tableOutput("logicalInfo")
-              # ,plotOutput("tabplot")
-           ),
-           tabPanel("TabPlot",
-            checkboxInput("limittabplot", label="Show selected variables only"),
-            plotOutput("mytabplot")
-           ),
-           tabPanel("PivotTable",
-                    rpivotTableOutput("pivotTable")
-           )
-         )
-      ),
-      tabPanel("Table", 
-               dataTableOutput("mydt")
-      ),
-      tabPanel("Analysis", 
-               htmlOutput("analysis")
-      ),
-      tabPanel("Source",
-               aceEditor("acermd", mode="markdown"))
-    )
-  )
-=======
->>>>>>> f0f3898fa2db697dffef482290647e7e6152e4da
 ))
