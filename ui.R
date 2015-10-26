@@ -1,5 +1,7 @@
 library(shiny)
 library(shinyAce)
+require(rpivotTable) #install_github(c("ramnathv/htmlwidgets", "smartinsightsfromdata/rpivotTable"))
+
 source("R/dkdfinfo.r")
 source("R/dkgraph.r")
 source("R/dkutils.r")
@@ -98,6 +100,9 @@ shinyUI(pageWithSidebar(
            tabPanel("TabPlot",
             checkboxInput("limittabplot", label="Show selected variables only"),
             plotOutput("mytabplot")
+           ),
+           tabPanel("PivotTable",
+                    rpivotTableOutput("pivotTable")
            )
          )
       ),

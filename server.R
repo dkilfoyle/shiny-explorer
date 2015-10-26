@@ -4,6 +4,7 @@ require(knitr)
 require(brew)
 #library(rCharts)
 library(tabplot) #install_github("tabplot", username="mtennekes", subdir="pkg")
+require(rpivotTable) #install_github(c("ramnathv/htmlwidgets", "smartinsightsfromdata/rpivotTable"))
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
@@ -192,6 +193,10 @@ shinyServer(function(input, output, session) {
     }
     else
       tableplot(getSelectedDF())
+  })
+  
+  output$pivotTable = renderRpivotTable({
+    rpivotTable(data=getSelectedDF()) #, onRefresh=htmlwidgets::JS("function(config) { Shiny.onInputChange('myPivotData', config); }"))
   })
 
 })
