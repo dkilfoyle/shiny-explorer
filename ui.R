@@ -117,6 +117,40 @@ shinyUI(navbarPage("Shiny-Explorer", position="fixed-top",
     ) # sidebarLayout
   ), # tabPanel(Explorer)
   
+  navbarMenu("Import", icon=icon("list"),
+    tabPanel("Excel", icon=icon("list"),
+      sidebarLayout(
+        sidebarPanel(   
+          h3("Data Import"),
+          wellPanel(
+            h4("Excel .xls/.xlsx:"),
+            tags$hr(),
+            fileInput('importFile', label=NULL, accept=c('.xls','.xlsx')),
+            selectInput("excelsheets", "Sheet:", choices = c()),
+            textInput("xlsdataframe", "DataFrame Name:", "myxlsdf"),
+            actionButton("assignxls", "Assign to DF")
+          )
+        ),
+        mainPanel()
+      )
+    ),
+    tabPanel("CSV", icon=icon("list"),
+      sidebarLayout(
+       sidebarPanel(   
+         h3("Data Import"),
+         wellPanel(
+           h4("CSV:"),
+           tags$hr(),
+           fileInput('importFile', label=NULL, accept=c('.xls','.xlsx')),
+           textInput("csvdataframe", "DataFrame Name:", "mycsvdf"),
+           actionButton("assigncsv", "Assign to DF")
+         )
+       ),
+       mainPanel()
+      )
+    )
+  ), # navbarMenu(Import)
+  
   navbarMenu("Tests", icon=icon("bar-chart"),
     tabPanel("2 Sample"),
     tabPanel("Correlation")

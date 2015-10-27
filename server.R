@@ -2,16 +2,43 @@ require(knitr)
 require(brew)
 library(tabplot) #install_github("tabplot", username="mtennekes", subdir="pkg")
 library(ggplot2)
+library(readxl)
 
 # Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output, session) {
+  
+  observeEvent(input$importFile, {
+    inFile <- input$importFile
+    if(is.null(inFile))
+      return(NULL)
+    # hack for readxl no extension open issue #85
+    file.rename(inFile$datapath, paste(inFile$datapath, ".xlsx", sep=""))
+    xlsfile = paste(inFile$datapath, ".xlsx", sep="")
+    updateSelectInput(session, "excelsheets", choices=excel_sheets(xlsfile))
+  })
+  
+  observeEvent(input$assignxls, {
+    xlsfile = paste(input$importFile$datapath, ".xlsx", sep="")
+    x=read_excel(xlsfile, input$excelsheets)
+    
+    # clean up 1 - remove NA cols
+    numna = sum(is.na(colnames(x)))
+    newnames = paste("NACOL", 1:numna, sep="")
+    colnames(x)[is.na(colnames(x))]=newnames
+    
+    # clean up 2 - convert spaces to dots
+    names(x) <- sub(" ", ".", names(x))
+    
+    assign(input$xlsdataframe,x, envir=.GlobalEnv)
+    updateSelectInput(session, "dataset", "Dataframe:", choices = getDataFrames(), selected = getDataFrames()[1])
+  })
   
   getSelectedDF <- reactive({
     eval(parse(text=input$dataset))
   })
   
   # when dataset changed populate the summaries and variable selection dropdowns
-  observe({
+  observeEvent(input$dataset, {
     dfinfo = getdfinfo(input$dataset)
     
     # Update the field selects
